@@ -1,54 +1,89 @@
 using UnityEngine;
-using Teeeest;
+
 
 public class Move : MonoBehaviour
 {
     [SerializeField] private bool isTool;
     [SerializeField] private bool isTable;
     [SerializeField] private bool isGuide;
+    [SerializeField] private GameObject spindle;
 
-    private void Start()
-    {
-        Init();
-    }
-
-    private void Init()
-    {
-        TestClass.CreateWindow();
-        TestClass.x = gameObject.transform.position.x;
-        TestClass.y = gameObject.transform.position.y;
-        TestClass.z = gameObject.transform.position.z;
-    }
+    private const float MAX_X = 0.600f;
+    private const float MAX_Y = 0.610f;
+    private const float MAX_Z = 0.305f;
 
     void Update()
     {
-        if (isTool)
-        {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, TestClass.y, gameObject.transform.position.z);
-        }
-        if(isTable)
+        if(CreateWindow.isRun)
 		{
-            gameObject.transform.position = new Vector3(TestClass.x, gameObject.transform.position.y, TestClass.z);
-        }
-        if (isGuide)
-        {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, TestClass.z);
+            if (isTool
+            && CreateWindow.y >= MAX_Y * -1
+            && gameObject.tag == "CurrentTool")
+            {
+                gameObject.transform.position = new Vector3
+                    (gameObject.transform.position.x,
+                    CreateWindow.y,
+                    gameObject.transform.position.z);
+            }
+
+            //else if(isTool)
+            //{
+            //    gameObject.transform.position = new Vector3
+            //        (gameObject.transform.position.x,
+            //        MAX_Y * -1,
+            //        gameObject.transform.position.z);
+            //}
+
+            if (isTable
+                && CreateWindow.x >= MAX_X * -1 && CreateWindow.x <= MAX_X
+                && CreateWindow.z >= MAX_Z * -1 && CreateWindow.z <= MAX_Z)
+            {
+                gameObject.transform.position = new Vector3
+                    (CreateWindow.x,
+                    gameObject.transform.position.y,
+                    CreateWindow.z);
+            }
+
+            //else if(isTable)
+            //{
+            //    gameObject.transform.position = new Vector3
+            //        (MAX_X,
+            //        gameObject.transform.position.y,
+            //        MAX_Z);
+            //}
+
+            if (isGuide
+                 && CreateWindow.z >= MAX_Z * -1 && CreateWindow.z <= MAX_Z)
+            {
+                gameObject.transform.position = new Vector3
+                    (gameObject.transform.position.x,
+                    gameObject.transform.position.y,
+                    CreateWindow.z);
+            }
+
+            //else if(isGuide)
+            //{
+            //    gameObject.transform.position = new Vector3
+            //        (gameObject.transform.position.x,
+            //        gameObject.transform.position.y,
+            //        MAX_Z);
+            //}
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "TriggerColor")
-        {
-            gameObject.GetComponent<MeshRenderer>().sharedMaterials[0].color = Color.red;
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "TriggerColor")
+    //    {
+    //        gameObject.GetComponent<MeshRenderer>().sharedMaterials[0].color = Color.red;
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "TriggerColor")
-        {
-            gameObject.GetComponent<MeshRenderer>().sharedMaterials[0].color = Color.white;
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.tag == "TriggerColor")
+    //    {
+    //        gameObject.GetComponent<MeshRenderer>().sharedMaterials[0].color = Color.white;
+    //    }
+    //}
 }

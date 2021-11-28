@@ -2,17 +2,23 @@ using UnityEngine;
 
 public class ShopTool : MonoBehaviour
 {
-    private float numberTool = 0;
+    private float tempAngle = 12f;
+
     public static int number = 0;
 
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space))
 		{
-             transform.RotateAround(transform.position, Vector3.right, 360/30);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.Euler(transform.rotation.x + tempAngle, transform.rotation.y, transform.rotation.z),
+               Time.deltaTime * 15f);
+        }
 
-            numberTool = transform.rotation.eulerAngles.x / 12;
-            number = (int)numberTool;
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            number = (int)(tempAngle / 12.0f % 30);
+            tempAngle += 12f;
         }
     }
 }

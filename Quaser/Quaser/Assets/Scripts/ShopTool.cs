@@ -1,4 +1,5 @@
 using UnityEngine;
+using AxiOMADataTest;
 
 public class ShopTool : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class ShopTool : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space) && IO_Digital_8_Control.arrayBool[0])
 		{
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.Euler(transform.rotation.x + tempAngle, transform.rotation.y, transform.rotation.z),

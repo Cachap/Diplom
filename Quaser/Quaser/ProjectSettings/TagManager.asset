@@ -8,6 +8,7 @@ TagManager:
   - Patron
   - Tool
   - CurrentTool
+  - Point
   layers:
   - Default
   - TransparentFX

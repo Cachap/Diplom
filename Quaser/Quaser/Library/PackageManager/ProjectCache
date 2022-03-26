@@ -1,6 +1,6 @@
 m_ProjectFiles:
   m_ManifestFileStatus:
-    m_FilePath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430/Diplom/Diplom/Quaser/Quaser/Packages/manifest.json"
+    m_FilePath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u0420/Diplom/Diplom/Quaser/Quaser/Packages/manifest.json"
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -8,7 +8,7 @@ m_ProjectFiles:
       ticks: 637717366682532231
     m_Hash: 1901230284
   m_LockFileStatus:
-    m_FilePath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430/Diplom/Diplom/Quaser/Quaser/Packages/packages-lock.json"
+    m_FilePath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u0420/Diplom/Diplom/Quaser/Quaser/Packages/packages-lock.json"
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -25,7 +25,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 1.5.7
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.collab-proxy@1.5.7"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.collab-proxy@1.5.7"
       assetPath: Packages/com.unity.collab-proxy
       name: com.unity.collab-proxy
       displayName: Version Control
@@ -72,8 +72,10 @@ m_PackageAssets:
         - 1.13.5
         - 1.14.1
         - 1.14.4
+        - 1.14.7
         - 1.15.1
         - 1.15.4
+        - 1.15.7
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -94,6 +96,7 @@ m_PackageAssets:
         - 1.12.5
         - 1.14.1
         - 1.14.4
+        - 1.14.7
         - 2.0.0-preview.6
         - 2.0.0-preview.8
         - 2.0.0-preview.15
@@ -147,7 +150,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 2.0.7
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.rider@2.0.7"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.rider@2.0.7"
       assetPath: Packages/com.unity.ide.rider
       name: com.unity.ide.rider
       displayName: JetBrains Rider Editor
@@ -254,7 +257,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 2.0.9
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.visualstudio@2.0.9"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.visualstudio@2.0.9"
       assetPath: Packages/com.unity.ide.visualstudio
       name: com.unity.ide.visualstudio
       displayName: Visual Studio Editor
@@ -343,7 +346,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 1.2.3
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.vscode@1.2.3"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ide.vscode@1.2.3"
       assetPath: Packages/com.unity.ide.vscode
       name: com.unity.ide.vscode
       displayName: Visual Studio Code Editor
@@ -414,7 +417,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 1.1.26
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.test-framework@1.1.26"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.test-framework@1.1.26"
       assetPath: Packages/com.unity.test-framework
       name: com.unity.test-framework
       displayName: Test Framework
@@ -510,7 +513,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 3.0.6
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.textmeshpro@3.0.6"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.textmeshpro@3.0.6"
       assetPath: Packages/com.unity.textmeshpro
       name: com.unity.textmeshpro
       displayName: TextMeshPro
@@ -677,7 +680,7 @@ m_PackageAssets:
       isDirectDependency: 1
       version: 1.4.8
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.timeline@1.4.8"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.timeline@1.4.8"
       assetPath: Packages/com.unity.timeline
       name: com.unity.timeline
       displayName: Timeline
@@ -2642,7 +2645,7 @@ m_PackageAssets:
       isDirectDependency: 0
       version: 1.0.6
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ext.nunit@1.0.6"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.ext.nunit@1.0.6"
       assetPath: Packages/com.unity.ext.nunit
       name: com.unity.ext.nunit
       displayName: Custom NUnit
@@ -2703,7 +2706,7 @@ m_PackageAssets:
       isDirectDependency: 0
       version: 2.0.0
       source: 1
-      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.nuget.newtonsoft-json@2.0.0"
+      resolvedPath: "C:\\Users\\maksi\\Desktop\\\u0428\u0442\u0443\u0447\u043A\u0438\\\u0414\u0438\u0420\\Diplom\\Diplom\\Quaser\\Quaser\\Library\\PackageCache\\com.unity.nuget.newtonsoft-json@2.0.0"
       assetPath: Packages/com.unity.nuget.newtonsoft-json
       name: com.unity.nuget.newtonsoft-json
       displayName: Newtonsoft Json
@@ -2776,5 +2779,5 @@ m_PackageAssets:
         path: 
   m_LocalPackages:
     m_LocalFileStatus: []
-m_ProjectPath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u043F\u043B\u043E\u043C\u0418\u0420\u0430\u0431\u043E\u0442\u0430/Diplom/Diplom/Quaser/Quaser/Packages"
+m_ProjectPath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/\u0414\u0438\u0420/Diplom/Diplom/Quaser/Quaser/Packages"
 m_EditorVersion: 2020.3.3f1 (76626098c1c4)

@@ -1,3 +1,4 @@
+using Assets.Scripts.Machine;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,134 +8,119 @@ public class Hand : MonoBehaviour
 
     private int changePos = 1;
     private int changePos_Y = 1;
+
+    //Сдвиг для центрирования инструмента в патроне
     private const float Z = 0.0077f;
     private const float Y = -0.85f;
+
     private GameObject Hand_obj;
-    private GameObject temp;
+    private Tool temp_tool;
 
     [SerializeField]
-    private GameObject ShopTool_obj;
+    private GameObject ShopToolObject;
 
     [SerializeField]
-    private GameObject Spindle_obj;
+    private GameObject SpindleObject;
 
-    [SerializeField]
-    private GameObject ToolCurrent_obj;
+    public static Tool CurrentTool;
 
-    public static List<GameObject> ToolChange_obj;
-    public static List<GameObject> Patron_obj;
+    public static List<Tool> ChangeTools;
+    public static List<GameObject> PatronObjects;
 
     private void Start()
 	{
-        Patron_obj = new List<GameObject>();
-        ToolChange_obj = new List<GameObject>();
-        //ToolCurrent_obj.tag = "CurrentTool";
+        PatronObjects = new List<GameObject>();
+        ChangeTools = new List<Tool>();
 
         Hand_obj = gameObject;
         cur_Y = transform.position.y;
-	}
+    }
 
 	void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        //Поворот руки на 180 градусов
+        if (Input.GetKey(KeyCode.Alpha1))
         {
             transform.rotation = Quaternion.Lerp(transform.rotation,
                 Quaternion.Euler(transform.rotation.x, 180*changePos, transform.rotation.z), 
                 15f);
         }
 
-		if (Input.GetKeyUp(KeyCode.E))
+        //Захват инструментов
+		if (Input.GetKeyUp(KeyCode.Alpha1))
 		{
-            //         if (Patron_obj[ShopTool.number] != null)
-            //{
-            //             for (int i = 0; i < ToolChange_obj.Count; i++)
-            //	{
-            //                 if (Patron_obj[ShopTool.number].transform.Find("Цанговый патрон").transform.position == ToolChange_obj[i].transform.position)
-            //		{
-            //                     temp_toolPos = i;
-            //		}
-            //           }
-
-            //             Patron_obj[ShopTool.number].transform.Find("Цанговый патрон").transform.parent = Hand_obj.transform;
-            //         }
-
-            //ToolCurrent_obj.transform.parent = null;
-            //ToolCurrent_obj.transform.parent = Hand_obj.transform;
-            ToolChange_obj[ShopTool.number].transform.parent = Hand_obj.transform;
-            ToolCurrent_obj.transform.parent = Hand_obj.transform;
+            ChangeTools[ShopTool.number].ToolObject.transform.parent = Hand_obj.transform;
+            CurrentTool.ToolObject.transform.parent = Hand_obj.transform;
 		}
 
-        //Выдвижение
-		if (Input.GetKey(KeyCode.W))
+        //Выдвижение руки
+		if (Input.GetKey(KeyCode.Alpha2))
         {  
             transform.position = Vector3.Lerp(transform.position, 
                 new Vector3(transform.position.x, 
                     cur_Y - 0.074f, 
                     transform.position.z), 
-                Time.deltaTime*15f);
+                15f);
         }
 
-        //Проворот на 360 градусов
-        if (Input.GetKey(KeyCode.Q))
+        //Проворот руки на 360 градусов
+        if (Input.GetKey(KeyCode.Alpha3))
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.Euler(transform.rotation.x, 
                     360/changePos, 
                     transform.rotation.z),
-               Time.deltaTime * 30f);
+               30f);
         }
 
-        //Задвижение
-        if (Input.GetKey(KeyCode.S))
+        //Задвижение руки
+        if (Input.GetKey(KeyCode.Alpha4))
         {
             transform.position = Vector3.Lerp(transform.position, 
                 new Vector3(transform.position.x,
                     cur_Y, 
                     transform.position.z), 
-                Time.deltaTime*15f);
+                15f);
         }
 
-        //Проворот на 90 градусов
-        if (Input.GetKey(KeyCode.Y))
+        //Проворот руки на 90 градусов
+        if (Input.GetKey(KeyCode.Alpha5))
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.Euler(transform.rotation.x, 
                     90*changePos_Y, 
                     transform.rotation.z),
-               Time.deltaTime * 30f);
+               30f);
         }
 
-        //Сброс "Родителей" инструментов и привязка новых
+        //Перепривязка родителей
         if (Input.GetKeyUp(KeyCode.R))
         {
             changePos_Y *= -1;
 
+            //Нужно для корректоного поворота руки в исходное положение
             if (changePos == 1)	
                 changePos = 2;
 			else 
                 changePos = 1;
 
-            temp = ToolCurrent_obj; 
-              
-            //ToolChange_obj[temp_toolPos].transform.parent = null;
-              
+            temp_tool = CurrentTool;
+
             //Перепривязка родителей
-            ToolChange_obj[ShopTool.number].transform.parent = Spindle_obj.transform;
-            ToolCurrent_obj.transform.parent = Patron_obj[ShopTool.number].transform;
+            ChangeTools[ShopTool.number].ToolObject.transform.parent = SpindleObject.transform;
+            CurrentTool.ToolObject.transform.parent = PatronObjects[ShopTool.number].transform;
 
-            ToolCurrent_obj = ToolChange_obj[ShopTool.number];
+            CurrentTool = ChangeTools[ShopTool.number];         
+            CurrentTool.ToolObject.tag = "CurrentTool";
 
-            ToolChange_obj[ShopTool.number] = temp;
+            ChangeTools[ShopTool.number] = temp_tool;
+            ChangeTools[ShopTool.number].ToolObject.tag = "Tool";
 
             //Сдвиг к центру патрона и шпинделя
-            ToolChange_obj[ShopTool.number].transform.localPosition = new Vector3(0,Y,Z);
-            ToolCurrent_obj.transform.localPosition = Vector3.zero;
+            ChangeTools[ShopTool.number].ToolObject.transform.localPosition = new Vector3(0,Y,Z);
+            CurrentTool.ToolObject.transform.localPosition = Vector3.zero;
 
-            //ToolChange_obj[temp_toolPos].transform.parent = null;
-            //ToolChange_obj[temp_toolPos].transform.parent = Patron_obj[ShopTool.number].transform;
-
-            //ToolCurrent_obj.tag = "CurrentTool";
-            //ToolChange_obj[temp_toolPos].tag = "Tool";
+            TextUpdate.Change(CurrentTool);
         }
 	}
 }

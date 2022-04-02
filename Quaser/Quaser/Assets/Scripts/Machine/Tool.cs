@@ -8,38 +8,77 @@ namespace Assets.Scripts.Machine
 
         public int Number { get; set; }
 
+        public int Length { get; set; }
+
+        public int Radius { get; set; }
+
         public Vector3 Position { get; set; }
 
         public Quaternion Rotation { get; set; }
 
-        public Transform ShopToolTransform { get; set; }
+        public Transform ParentTransform { get; set; }
 
-        private GameObject ToolInPatronObject;
-        private GameObject ToolObject;
-  
+        private readonly GameObject ToolInPatronObject;
+
+        private readonly GameObject ToolObjectLoad;
+
+        public GameObject ToolObject;
+        
+        //Позиция оси вращения 
         private Vector3 PositionPoint;
 
         public Tool()
         {
             ToolInPatronObject = Resources.Load<GameObject>("Patron");
+            ToolObjectLoad = Resources.Load<GameObject>("Цанговый патрон");
+
+            Length = 200;
+            Radius = 50;
         }
 
-        public void AddToolInScene()
+        public void AddToolInShopTool()
         {
-            Hand.Patron_obj.Add(Instantiate(ToolInPatronObject, ShopToolTransform));
-            Hand.Patron_obj[Number].transform.position = Position;
-            Hand.Patron_obj[Number].transform.rotation = Rotation;
+            for (int i = 0; i < Hand.ChangeTools.Count; i++)
+            {
+                if (Number == Hand.ChangeTools[i].Number)
+                {
+                    Destroy(Hand.PatronObjects[i]);
+                    Hand.PatronObjects.RemoveAt(i);
+                    Hand.ChangeTools.RemoveAt(i);
+                }
+            }
 
-            PositionPoint = Hand.Patron_obj[Number].transform.GetChild(2).position;
+            Hand.PatronObjects.Add(Instantiate(ToolInPatronObject, ParentTransform));
+            Hand.PatronObjects[Number].transform.position = Position;
+            Hand.PatronObjects[Number].transform.rotation = Rotation;
 
-            ToolObject = Hand.Patron_obj[Number].transform.GetChild(1).gameObject;
+            PositionPoint = Hand.PatronObjects[Number].transform.GetChild(2).position;
 
-            Hand.ToolChange_obj.Add(ToolObject);
+            ToolObject = Hand.PatronObjects[Number].transform.GetChild(1).gameObject;
+
+            Hand.ChangeTools.Add(this);
         }
 
-        public void RotateTool()
+        public void AddToolInSpindle()
         {
-            Hand.Patron_obj[Number].transform.RotateAround(PositionPoint, Vector3.back, 90f);
+            ToolObject = Instantiate(ToolObjectLoad, ParentTransform);
+            ToolObject.transform.position = Position;
+            ToolObject.transform.rotation = Rotation;
+            ToolObject.tag = "CurrentTool";
+
+            Hand.CurrentTool = this;
+
+            TextUpdate.Change(this);
+        }
+
+        public void RotateToolToCapture()
+        {
+            Hand.PatronObjects[Number].transform.RotateAround(PositionPoint, Vector3.back, 90f);
+        }
+
+        public void ReturnTool()
+        {
+            Hand.PatronObjects[Number].transform.RotateAround(PositionPoint, Vector3.back, -90f);
         }
     }
 }

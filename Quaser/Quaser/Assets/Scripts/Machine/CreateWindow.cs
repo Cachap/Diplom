@@ -14,8 +14,8 @@ public class CreateWindow : MonoBehaviour
 
     void Start()
     {
-        thread = new Thread(new ThreadStart(Init));
-        thread.Start();
+       thread = new Thread(() => Init());
+       thread.Start();
     }
 
     private void Update()

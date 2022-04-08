@@ -25,29 +25,36 @@ public class CreateTools : MonoBehaviour
         tools = new List<Tool>();
         currentlyPositionTool = new Vector3(X, Y, Z);
         currentlyRotationTool = Quaternion.Euler(0, 0, 90);
+
+        for(int i = 0; i < 30; i++)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+               Quaternion.Euler(transform.rotation.x + 12 * i,
+                   transform.rotation.y,
+                   transform.rotation.z),
+                   1f);
+
+            tools.Add(new Tool
+            {
+                Name = $"Tool_change_{i}",
+                Position = currentlyPositionTool,
+                Rotation = currentlyRotationTool,
+                ParentTransform = gameObject.transform,
+                Number = i
+            });
+            tools[i].AddToolInShopTool();
+        }
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T) && tools.Count < 30)
-        {
-            tools.Add(new Tool
-            {
-                Name = $"Tool_change_{ShopTool.number}",
-                Position = currentlyPositionTool,
-                Rotation = currentlyRotationTool,
-                ParentTransform = gameObject.transform,
-                Number = ShopTool.number
-            });
-            tools[ShopTool.number].AddToolInShopTool();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Y) && tools.Count == 0)
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             Hand.CurrentTool = new Tool
             {
                 Name = $"Tool_main",
-                Position = new Vector3(0,0,0),
+                Position = new Vector3(0, 0, 0),
                 Rotation = Quaternion.Euler(0, 0, 0),
                 ParentTransform = spindle.transform,
                 Number = 1000 //Поправить

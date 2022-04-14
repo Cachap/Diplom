@@ -1,11 +1,11 @@
 using Assets.Scripts.Machine;
-using AxiOMADataTest;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CreateTools : MonoBehaviour
 {
-    //Лист инструментов
+    //Список инструментов
     public static List<Tool> tools;
 
     //Координаты для появления патрона
@@ -26,7 +26,8 @@ public class CreateTools : MonoBehaviour
         currentlyPositionTool = new Vector3(X, Y, Z);
         currentlyRotationTool = Quaternion.Euler(0, 0, 90);
 
-        for(int i = 0; i < 30; i++)
+        #region Заполнение магазина инструментов
+        for (int i = 0; i < 30; i++)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation,
                Quaternion.Euler(transform.rotation.x + 12 * i,
@@ -45,10 +46,12 @@ public class CreateTools : MonoBehaviour
             tools[i].AddToolInShopTool();
         }
         transform.rotation = Quaternion.Euler(0, 0, 0);
+        #endregion
     }
 
     private void Update()
     {
+        //Создание инструмента в шпинделе(рабочего инструмента)
         if (Input.GetKeyDown(KeyCode.Y))
         {
             Hand.CurrentTool = new Tool
@@ -61,11 +64,5 @@ public class CreateTools : MonoBehaviour
             };
             Hand.CurrentTool.AddToolInSpindle();
         }
-
-        if (Input.GetKeyUp(KeyCode.M))
-            tools[ShopTool.number].RotateToolToCapture();
-
-        if (Input.GetKeyUp(KeyCode.N))
-            tools[ShopTool.number].ReturnTool();
     }
 }

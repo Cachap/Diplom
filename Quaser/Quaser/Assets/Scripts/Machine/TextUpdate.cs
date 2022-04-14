@@ -10,15 +10,15 @@ public class TextUpdate : MonoBehaviour
     {
         texts = gameObject.GetComponentsInChildren<Text>();
 
-        texts[3].text = $"Длина: -";
-        texts[2].text = $"Радиус: -";
-        texts[1].text = $"Название: -";
+        texts[2].text = $"Длина: -";
+        texts[1].text = $"Радиус: -";
+        texts[0].text = $"Имя: -";
     }
 
     public static void Change(Tool tool)
     {
-        texts[3].text = $"Длина: {tool.Length}";
-        texts[2].text = $"Радиус: {tool.Radius}";
-        texts[1].text = $"Название: {tool.Name}";
+        texts[2].text = $"Длина: {tool.Length}";
+        texts[1].text = $"Радиус: {tool.Radius}";
+        texts[0].text = $"Имя: {tool.Name}";
     }
 }

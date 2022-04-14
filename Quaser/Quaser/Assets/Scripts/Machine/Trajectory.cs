@@ -7,10 +7,8 @@ public class Trajectory : MonoBehaviour
 
     private void Start()
     {
-        line.startWidth = 0.001f;
-        line.startColor = Color.red;
+        line.startWidth = 0.01f;
         line.positionCount = 0;
-        line.endColor = Color.red;
     }
 
     private void Update()

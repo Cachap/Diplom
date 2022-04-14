@@ -5,27 +5,18 @@ namespace Assets.Scripts.Machine
     public class Tool : MonoBehaviour
     {
         public string Name { get; set; }
-
         public int Number { get; set; }
-
         public int Length { get; set; }
-
         public int Radius { get; set; }
 
         public Vector3 Position { get; set; }
-
         public Quaternion Rotation { get; set; }
 
         public Transform ParentTransform { get; set; }
-
         private readonly GameObject ToolInPatronObject;
-
         private readonly GameObject ToolObjectLoad;
-
         public GameObject ToolObject;
-        
-        //Позиция оси вращения 
-        private Vector3 PositionPoint;
+        public Vector3 PositionPoint;
 
         public Tool()
         {
@@ -71,14 +62,9 @@ namespace Assets.Scripts.Machine
             TextUpdate.Change(this);
         }
 
-        public void RotateToolToCapture()
+        public void ChangeSize()
         {
-            Hand.PatronObjects[Number].transform.RotateAround(PositionPoint, Vector3.back, 90f);
-        }
-
-        public void ReturnTool()
-        {
-            Hand.PatronObjects[Number].transform.RotateAround(PositionPoint, Vector3.back, -90f);
+            
         }
     }
 }

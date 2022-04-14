@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-    private float speed = 0.02f;
-    private float speedRotation = 2f;
+    private readonly float speed = 0.02f;
+    private readonly float speedRotation = 2f;
     
     private float mouseWheelDirection;
     private float MouseX;

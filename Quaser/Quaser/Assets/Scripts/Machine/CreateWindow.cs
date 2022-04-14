@@ -33,10 +33,7 @@ public class CreateWindow : MonoBehaviour
         }
     }
 
-    private void Init()
-    {
-        Program.CreateWindow();
-    }
+    private void Init() => Program.CreateWindow();
 
     private void OnApplicationQuit() => thread.Abort();
 }

@@ -1,4 +1,5 @@
 using Assets.Scripts.Machine;
+using AxiOMADataTest;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,8 +10,8 @@ public class CreateTools : MonoBehaviour
     public static List<Tool> tools;
 
     //Координаты для появления патрона
-    private const float X = 0.4665f; 
-    private const float Y = 0.9028f; 
+    private const float X = 0.4665f;
+    private const float Y = 0.9028f;
     private const float Z = -0.0695f;
 
     //Позиция и вращение патрона
@@ -29,15 +30,11 @@ public class CreateTools : MonoBehaviour
         #region Заполнение магазина инструментов
         for (int i = 0; i < 30; i++)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation,
-               Quaternion.Euler(transform.rotation.x + 12 * i,
-                   transform.rotation.y,
-                   transform.rotation.z),
-                   1f);
+            transform.rotation = Quaternion.Euler(i * 12f, 0, 0);
 
             tools.Add(new Tool
             {
-                Name = $"Tool_change_{i}",
+                Name = $"Change_Tool_{i}",
                 Position = currentlyPositionTool,
                 Rotation = currentlyRotationTool,
                 ParentTransform = gameObject.transform,
@@ -56,13 +53,23 @@ public class CreateTools : MonoBehaviour
         {
             Hand.CurrentTool = new Tool
             {
-                Name = $"Tool_main",
+                Name = $"{Form1.toolParam_1.ToolName}",
                 Position = new Vector3(0, 0, 0),
                 Rotation = Quaternion.Euler(0, 0, 0),
                 ParentTransform = spindle.transform,
-                Number = 1000 //Поправить
+                Number = 1000,
+                Length = Form1.toolParam_1.cutting_edge[0].lenght1,
+                Radius = Form1.toolParam_1.cutting_edge[0].radius
             };
             Hand.CurrentTool.AddToolInSpindle();
+        }
+    }
+
+    public void UpdateTools()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            tools[i].UpdateTool();
         }
     }
 }

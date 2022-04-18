@@ -10,12 +10,12 @@ public class Move : MonoBehaviour
     {
         if(CreateWindow.isRun)
 		{
-            if (gameObject.tag == "CurrentTool")
-            {
-                gameObject.transform.position = new Vector3(gameObject.transform.position.x,
-                    CreateWindow.y,
-                    gameObject.transform.position.z);
-            }
+            //if (gameObject.tag == "CurrentTool")
+            //{
+            //    gameObject.transform.position = new Vector3(gameObject.transform.position.x,
+            //        CreateWindow.y,
+            //        gameObject.transform.position.z);
+            //}
 
             if (isTable)
             {

@@ -9,10 +9,6 @@ public class TextUpdate : MonoBehaviour
     private void Start()
     {
         texts = gameObject.GetComponentsInChildren<Text>();
-
-        texts[2].text = $"Длина: -";
-        texts[1].text = $"Радиус: -";
-        texts[0].text = $"Имя: -";
     }
 
     public static void Change(Tool tool)

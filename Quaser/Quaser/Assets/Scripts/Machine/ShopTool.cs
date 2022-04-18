@@ -22,31 +22,32 @@ public class ShopTool : MonoBehaviour
 
     private void Update()
     {
-       // plcHandler.ReadPlcRotate();
+        plcHandler.ReadPlcRotate();
 
-        //if (Input.GetKeyDown(KeyCode.Space) && !start)
-        //{
-        //    StartCoroutine(Rotate());
-        //}
+        if (Input.GetKeyDown(KeyCode.Space) && !start)
+        {
+            StartCoroutine(Rotate());
+        }
     }
 
-    //private IEnumerator Rotate()
-    //{
-    //    start = true;
+    private IEnumerator Rotate()
+    {
+        start = true;
 
-    //    while (x < angle * count)
-    //    {
-    //        x += Time.deltaTime * speed;
-    //        transform.localRotation = Quaternion.Euler(x,0,0);
+        while (x < angle * count)
+        {
+            x += Time.deltaTime * speed;
+            transform.localRotation = Quaternion.Euler(x, 0, 0);
 
-    //        yield return null;
-    //    }
-    //    transform.rotation = Quaternion.Euler(angle * count, 0, 0);
+            yield return null;
+        }
+        transform.rotation = Quaternion.Euler(angle * count, 0, 0);
 
-    //    StopCoroutine(Rotate());
-    //    start = false;W
+        StopCoroutine(Rotate());
+        start = false;
+        number = count;
 
-    //    if(count <= number)
-    //       count++;
-    //}
+        if (count < 3)
+            count++;
+    }
 }

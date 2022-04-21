@@ -4,13 +4,19 @@ using System.Collections;
 
 public class ShopTool : MonoBehaviour
 {
+    //Параметры для вращения магазина
     private readonly float angle = 12f;
     private readonly float speed = 12f;
 
+    //Номер сменяемого инструмента
     public static int number = 0;
-
-    private int count = 1;
+    //Текущий номер инструмента
+    private byte count = 0;
+    //Тееущий угол поворота
     private float x = 0;
+    //Состояние, которое необходимо для полного поворота
+    private PlcHandler.ShopToolStates temporaryState;
+    //Для корутины
     private bool start;
 
     public static PlcHandler plcHandler;
@@ -23,9 +29,9 @@ public class ShopTool : MonoBehaviour
     private void Update()
     {
         plcHandler.ReadPlcRotate();
-
-        if (Input.GetKeyDown(KeyCode.Space) && !start)
+        if (count != plcHandler.numberCurrentTool && !start)
         {
+            count = plcHandler.numberCurrentTool;
             StartCoroutine(Rotate());
         }
     }
@@ -34,20 +40,32 @@ public class ShopTool : MonoBehaviour
     {
         start = true;
 
-        while (x < angle * count)
+        if (temporaryState == PlcHandler.ShopToolStates.CwRotation)
         {
-            x += Time.deltaTime * speed;
-            transform.localRotation = Quaternion.Euler(x, 0, 0);
+            while (x < angle * count)
+            {
+                x += Time.deltaTime * speed;
+                transform.localRotation = Quaternion.Euler(x, 0, 0);
 
-            yield return null;
+                yield return null;
+            }
         }
-        transform.rotation = Quaternion.Euler(angle * count, 0, 0);
+
+        if (temporaryState == PlcHandler.ShopToolStates.CcwRotation)
+        {
+            while (x > angle * count)
+            {
+                x -= Time.deltaTime * speed;
+                transform.localRotation = Quaternion.Euler(x, 0, 0);
+
+                yield return null;
+            }
+        }
 
         StopCoroutine(Rotate());
-        start = false;
-        number = count;
 
-        if (count < 3)
-            count++;
+        temporaryState = plcHandler.shopToolState;
+        number = count;
+        start = false;
     }
 }

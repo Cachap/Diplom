@@ -10,16 +10,17 @@ public class Hand : MonoBehaviour
 
     //Запущена ли корутина
     private bool start;
+    private bool startPneumatic;
 
     //Сдвиг для центрирования инструмента в патроне
     private const float Z = 0.0077f;
     private const float Y = -0.85f;
-    private const float X = -0.008f;
+    private const float X = 0.0002f;
 
     //Направление вращения патрона
     private bool rotateToCapture = true;
 
-    private readonly float speed = 10f;
+    private readonly float speed = 0.6f;
     private bool change;
 
     private GameObject Hand_obj;
@@ -52,7 +53,7 @@ public class Hand : MonoBehaviour
             StartCoroutine(ChangeTool());
         }
 
-        if (ShopTool.plcHandler.handInputState == PlcHandler.HandInputStates.PneumaticCylinder && Input.GetKeyDown(KeyCode.M))
+        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.PneumaticCylinder && Input.GetKeyDown(KeyCode.M))
         {
             StartCoroutine(Rotate());
         }
@@ -83,7 +84,10 @@ public class Hand : MonoBehaviour
 
         //Сдвиг к центру патрона и шпинделя
         ChangeTools[ShopTool.number].ToolObject.transform.localPosition = new Vector3(X, Y, Z);
-        CurrentTool.ToolObject.transform.localPosition = new Vector3(X, 0, 0);
+        ChangeTools[ShopTool.number].ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        CurrentTool.ToolObject.transform.localPosition = new Vector3(0, 0, 0);
+        CurrentTool.ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
         TextUpdate.Change(CurrentTool);
         change = true;
@@ -99,14 +103,11 @@ public class Hand : MonoBehaviour
             //Поворот руки на 180 градусов
             case PlcHandler.HandOutputStates.RotateAngle_90:
                 {
-
-                    while (transform.rotation.eulerAngles.y != 180)
+                    float y = 90;
+                    while (y <= 180)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation,
-                        Quaternion.Euler(transform.rotation.x,
-                            180,
-                            transform.rotation.z),
-                        Time.deltaTime * speed);
+                        y += speed;
+                        transform.localRotation = Quaternion.Euler(0, y, 0);
 
                         yield return new WaitForEndOfFrame();
                     }
@@ -123,13 +124,11 @@ public class Hand : MonoBehaviour
             //Выдвижение руки
             case PlcHandler.HandOutputStates.Down:
                 {
-                    while(transform.position.y >= cur_Y - 0.074f + 0.000003f)
+                    float y = cur_Y;
+                    while (y >= cur_Y - 0.074f)
                     {
-                        transform.position = Vector3.Lerp(transform.position,
-                           new Vector3(transform.position.x,
-                               cur_Y - 0.074f,
-                               transform.position.z),
-                           Time.deltaTime * speed);
+                        y -= speed/150;
+                        transform.position = new Vector3(transform.position.x, y, transform.position.z);
 
                         yield return new WaitForEndOfFrame();
                     }
@@ -141,14 +140,11 @@ public class Hand : MonoBehaviour
             //Проворот руки на 360 градусов
             case PlcHandler.HandOutputStates.RotateAngle_180:
                 {
-                    while (transform.rotation.eulerAngles.y >= 0.01)
+                    float y = 180;
+                    while (y >= 0)
                     {
-                        transform.rotation = Quaternion.Lerp(transform.rotation,
-                        Quaternion.Euler(transform.rotation.x,
-                            360,
-                            transform.rotation.z),
-                        Time.deltaTime * speed);
-
+                        y -= speed;
+                        transform.localRotation = Quaternion.Euler(0, y, 0);
                         yield return new WaitForEndOfFrame();
                     }
                     StopCoroutine(ChangeTool());
@@ -159,13 +155,11 @@ public class Hand : MonoBehaviour
             //Задвижение руки
             case PlcHandler.HandOutputStates.Up:
                 {
-                    while (transform.position.y <= 0.7127)
+                    float y = cur_Y - 0.074f;
+                    while (y <= cur_Y)
                     {
-                        transform.position = Vector3.Lerp(transform.position,
-                        new Vector3(transform.position.x,
-                            cur_Y,
-                            transform.position.z),
-                        Time.deltaTime * speed);
+                        y += speed / 150;
+                        transform.position = new Vector3(transform.position.x, y, transform.position.z);
 
                         yield return new WaitForEndOfFrame();
                     }
@@ -180,21 +174,18 @@ public class Hand : MonoBehaviour
                     if (!change)
                         ChangeParent();
 
-                    while (transform.rotation.eulerAngles.y != 270)
+                    float y = 0;
+                    while (y >= -90)
                     {
-                        transform.rotation = Quaternion.LerpUnclamped(transform.rotation,
-                        Quaternion.Euler(transform.rotation.x,
-                           -90,
-                           transform.rotation.z),
-                        Time.deltaTime * speed * 5);
+                        y -= speed;
+                        transform.localRotation = Quaternion.Euler(0, y, 0);
 
                         yield return new WaitForEndOfFrame();
                     }
                     StopCoroutine(ChangeTool());
 
                     ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Return;
-                    transform.rotation = Quaternion.Euler(transform.rotation.x, 90, transform.rotation.z);
-
+                    startPneumatic = false;
                     break;
                 }
         }
@@ -215,7 +206,7 @@ public class Hand : MonoBehaviour
                     Vector3.back,
                     Mathf.Lerp(0, 90, Time.deltaTime));
 
-                yield return new WaitForEndOfFrame();
+                yield return null;
             }
             ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.PneumaticCylinder;
             rotateToCapture = false;
@@ -228,11 +219,12 @@ public class Hand : MonoBehaviour
                     Vector3.back,
                     Mathf.Lerp(0, -90, Time.deltaTime));
 
-                yield return new WaitForEndOfFrame();
+                yield return  null;
             }
             ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.None;
             rotateToCapture = true;
         }
+
         WritePlc();
         StopCoroutine(Rotate());
     }

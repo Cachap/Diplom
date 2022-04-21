@@ -4,11 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - TriggerColor
   - Patron
   - Tool
   - CurrentTool
   - Point
+  - TriggerTable
+  - TriggerGuide
+  - TriggerSpindle
   layers:
   - Default
   - TransparentFX

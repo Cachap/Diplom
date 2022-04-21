@@ -7,7 +7,6 @@ namespace Assets.Scripts.Machine
     {
         public string Name { get; set; }
         public int Number { get; set; }
-
         public float Length 
         { 
             get
@@ -30,7 +29,6 @@ namespace Assets.Scripts.Machine
                 }
             }
         }
-
         public float Radius 
         { 
             get
@@ -53,19 +51,20 @@ namespace Assets.Scripts.Machine
                 }
             }
         }
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
+        public Transform ParentTransform { get; set; }
+
+        public GameObject ToolObject;
+        public Vector3 PositionPoint;
 
         private float length;
         private float radius;
+        private float positionY;
+        private GameObject CutterObject;
 
-        public Vector3 Position { get; set; }
-        public Quaternion Rotation { get; set; }
-
-        public Transform ParentTransform { get; set; }
         private readonly GameObject ToolInPatronObject;
         private readonly GameObject ToolObjectLoad;
-        private GameObject CutterObject;
-        public GameObject ToolObject;
-        public Vector3 PositionPoint;
 
         private const float COEF_X = 0.00034f;
         private const float COEF_Z = 0.00037f;
@@ -93,14 +92,12 @@ namespace Assets.Scripts.Machine
             }
 
             Hand.PatronObjects.Add(Instantiate(ToolInPatronObject, ParentTransform));
-            Hand.PatronObjects[Number].transform.position = Position;
-            Hand.PatronObjects[Number].transform.rotation = Rotation;
+            Hand.PatronObjects[Number].transform.SetPositionAndRotation(Position, Rotation);
 
             PositionPoint = Hand.PatronObjects[Number].transform.GetChild(2).position;
-
             ToolObject = Hand.PatronObjects[Number].transform.GetChild(1).gameObject;
-
-            CutterObject = ToolObject.transform.GetChild(1).gameObject;
+            CutterObject = ToolObject.transform.GetChild(0).gameObject;
+            positionY = CutterObject.transform.localPosition.y;
 
             Hand.ChangeTools.Add(this);
         }
@@ -108,10 +105,10 @@ namespace Assets.Scripts.Machine
         public void AddToolInSpindle()
         {
             ToolObject = Instantiate(ToolObjectLoad, ParentTransform);
-            ToolObject.transform.position = Position;
-            ToolObject.transform.rotation = Rotation;
+            ToolObject.transform.SetPositionAndRotation(Position, Rotation);
             ToolObject.tag = "CurrentTool";
-            CutterObject = ToolObject.transform.GetChild(1).gameObject;
+            CutterObject = ToolObject.transform.GetChild(0).gameObject;
+            positionY = CutterObject.transform.localPosition.y;
 
             Hand.CurrentTool = this;
             ChangeSize();
@@ -122,17 +119,24 @@ namespace Assets.Scripts.Machine
         {
             CutterObject.transform.localScale = new Vector3(radius * COEF_X * 2, length * COEF_Y, radius * COEF_Z * 2);
             CutterObject.transform.localPosition = new Vector3(CutterObject.transform.localPosition.x,
-                CutterObject.transform.localPosition.y - (length * COEF_Y - 0.02f),
+                positionY - (length * COEF_Y - 0.02f),
                 CutterObject.transform.localPosition.z);
         }
 
         public void UpdateTool()
         {
-            //Length = Form1.toolParam_1.cutting_edge[Number % Form1.toolParam_1.cutting_edge.Length].lenght1;
-            //Radius = Form1.toolParam_1.cutting_edge[Number % Form1.toolParam_1.cutting_edge.Length].radius;
             Length = Random.Range(0f,300f);
             Radius = Random.Range(5f, 76.2f);
             ChangeSize();
+        }
+
+        public void UpdateToolInSpindle()
+        {
+            Length = Form1.toolParam_1.cutting_edge[0].lenght1;
+            Radius = Form1.toolParam_1.cutting_edge[0].radius;
+            Name = Form1.toolParam_1.ToolName;
+            ChangeSize();
+            TextUpdate.Change(this);
         }
     }
 }

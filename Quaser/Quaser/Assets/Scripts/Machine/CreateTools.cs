@@ -1,8 +1,8 @@
 using Assets.Scripts.Machine;
 using AxiOMADataTest;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CreateTools : MonoBehaviour
 {
@@ -44,25 +44,19 @@ public class CreateTools : MonoBehaviour
         }
         transform.rotation = Quaternion.Euler(0, 0, 0);
         #endregion
-    }
 
-    private void Update()
-    {
         //Создание инструмента в шпинделе(рабочего инструмента)
-        if (Input.GetKeyDown(KeyCode.Y))
+        Hand.CurrentTool = new Tool
         {
-            Hand.CurrentTool = new Tool
-            {
-                Name = $"{Form1.toolParam_1.ToolName}",
-                Position = new Vector3(0, 0, 0),
-                Rotation = Quaternion.Euler(0, 0, 0),
-                ParentTransform = spindle.transform,
-                Number = 1000,
-                Length = Form1.toolParam_1.cutting_edge[0].lenght1,
-                Radius = Form1.toolParam_1.cutting_edge[0].radius
-            };
-            Hand.CurrentTool.AddToolInSpindle();
-        }
+            Name = $"Main_Tool",
+            Position = new Vector3(0, 0, 0),
+            Rotation = Quaternion.Euler(0, 0, 0),
+            ParentTransform = spindle.transform,
+            Number = 1000,
+            Length = 100,
+            Radius = 30
+        };
+        Hand.CurrentTool.AddToolInSpindle();
     }
 
     public void UpdateTools()
@@ -71,5 +65,7 @@ public class CreateTools : MonoBehaviour
         {
             tools[i].UpdateTool();
         }
+
+        Hand.CurrentTool.UpdateToolInSpindle();
     }
 }

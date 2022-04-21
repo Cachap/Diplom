@@ -6,7 +6,7 @@ namespace Assets.Scripts.Machine
     {
         public enum HandInputStates { RotateAngle_90, Down, RotateAngle_180, Up, Return, PneumaticCylinder, None }
         public enum HandOutputStates { RotateAngle_90, Down, RotateAngle_180, Up, Return, PneumaticCylinder, None }
-        public enum ShopToolStates { CwRotation, CcwRotation, None }
+        public enum ShopToolStates { CwRotation, CcwRotation, PneumaticCylinder, None }
 
         public HandInputStates handInputState;
         public HandOutputStates handOutupState;
@@ -15,12 +15,12 @@ namespace Assets.Scripts.Machine
         private int numberBitHand;
         private int numberBitShopTool;
 
-        public int numberTool = 0;
+        public byte numberCurrentTool = 0;
 
         public void ReadPlcRotate()
         {
             numberBitShopTool = 3;
-            numberTool = Form1.numberTool;
+            numberCurrentTool = Form1.currentluNumberTool;
 
             for (int i = 0; i < Form1.plcRotate.Length; i++)
             {
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Machine
                     break;
 
                 case 2:
-                    handInputState = HandInputStates.PneumaticCylinder;
+                    shopToolState = ShopToolStates.PneumaticCylinder;
                     break;
 
                 case 3:

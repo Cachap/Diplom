@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class Move : MonoBehaviour
 {
     [SerializeField] private bool isTable;
@@ -31,5 +30,11 @@ public class Move : MonoBehaviour
                    CreateWindow.z);
             }
         }
+    }
+
+    public void Disconnect()
+    {
+        CreateWindow.isRun = false;
+        transform.position = Vector3.zero;
     }
 }

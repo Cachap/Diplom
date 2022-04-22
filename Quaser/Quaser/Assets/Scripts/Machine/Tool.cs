@@ -125,7 +125,7 @@ namespace Assets.Scripts.Machine
 
         public void UpdateTool()
         {
-            Length = Random.Range(0f,300f);
+            Length = Random.Range(0f, 300f);
             Radius = Random.Range(5f, 76.2f);
             ChangeSize();
         }

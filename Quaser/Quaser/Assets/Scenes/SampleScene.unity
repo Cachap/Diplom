@@ -1927,6 +1927,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u0421\u0442\u043E\u043B"
       objectReference: {fileID: 0}
+    - target: {fileID: 4137700636894797072, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137700636894797072, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137700636894797072, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 99e8460143586234ab0ff40fc687b232, type: 2}
+    - target: {fileID: 4137700636894797072, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.0028381348
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137700636894797072, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4532496664913691433, guid: f4e327275440c7d43b3ef7e5dc9d3cee, type: 3}
       propertyPath: m_RootOrder
       value: 10

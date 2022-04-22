@@ -53,7 +53,7 @@ public class Hand : MonoBehaviour
             StartCoroutine(ChangeTool());
         }
 
-        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.PneumaticCylinder && Input.GetKeyDown(KeyCode.M))
+        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.PneumaticCylinder && !startPneumatic)
         {
             StartCoroutine(Rotate());
         }
@@ -97,7 +97,6 @@ public class Hand : MonoBehaviour
     public IEnumerator ChangeTool()
     {
         start = true;
-
         switch (ShopTool.plcHandler.handOutupState)
         {
             //Поворот руки на 180 градусов
@@ -197,7 +196,8 @@ public class Hand : MonoBehaviour
     #region Поворот патрона
     public IEnumerator Rotate()
     {
-        start = true;
+        //start = true;
+        startPneumatic = true;
         if (rotateToCapture)
         {
             while (PatronObjects[ShopTool.number].transform.rotation.eulerAngles.z >= 1f)
@@ -225,7 +225,8 @@ public class Hand : MonoBehaviour
             rotateToCapture = true;
         }
 
-        WritePlc();
+        startPneumatic = false;
+        ShopTool.plcHandler.WritePlc();
         StopCoroutine(Rotate());
     }
     #endregion

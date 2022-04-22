@@ -16,11 +16,13 @@ namespace Assets.Scripts.Machine
         private int numberBitShopTool;
 
         public byte numberCurrentTool = 0;
+        public int numberTool = 100;
 
         public void ReadPlcRotate()
         {
             numberBitShopTool = 3;
             numberCurrentTool = Form1.currentluNumberTool;
+            numberTool = Form1.numberTool;
 
             for (int i = 0; i < Form1.plcRotate.Length; i++)
             {
@@ -90,6 +92,11 @@ namespace Assets.Scripts.Machine
                     handOutupState = HandOutputStates.None;
                     break;
             }
+        }
+
+        public void Impulse(bool value)
+        {
+            Form1.impuls = value;
         }
 
         public void WritePlc()

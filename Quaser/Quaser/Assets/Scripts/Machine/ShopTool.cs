@@ -29,7 +29,7 @@ public class ShopTool : MonoBehaviour
     private void Update()
     {
         plcHandler.ReadPlcRotate();
-        if (count != plcHandler.numberCurrentTool && !start)
+        if (count != plcHandler.numberCurrentTool && !start && plcHandler.numberCurrentTool != 0)
         {
             count = plcHandler.numberCurrentTool;
             StartCoroutine(Rotate());
@@ -66,6 +66,18 @@ public class ShopTool : MonoBehaviour
 
         temporaryState = plcHandler.shopToolState;
         number = count;
+
+        if(number == plcHandler.numberTool)
+        {
+            plcHandler.Impulse(true);
+            Invoke(nameof(Impulse), 0.5f);
+        }
+
         start = false;
+    }
+
+    private void Impulse()
+    {
+        plcHandler.Impulse(false);
     }
 }

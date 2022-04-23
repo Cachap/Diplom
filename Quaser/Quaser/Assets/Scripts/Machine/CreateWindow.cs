@@ -12,8 +12,11 @@ public class CreateWindow : MonoBehaviour
 
     public static bool isRun;
 
-    void Start()
+	public void RunWindow()
     {
+        if (thread != null)
+            thread.Abort();
+
        thread = new Thread(() => Init());
        thread.Start();
     }
@@ -34,6 +37,4 @@ public class CreateWindow : MonoBehaviour
     }
 
     private void Init() => Program.CreateWindow();
-
-    private void OnApplicationQuit() => thread.Abort();
 }

@@ -22,6 +22,8 @@ public class Hand : MonoBehaviour
 
     private readonly float speed = 0.6f;
     private bool change;
+    private bool down;
+    private bool up = true;
 
     private GameObject Hand_obj;
 
@@ -53,12 +55,12 @@ public class Hand : MonoBehaviour
             StartCoroutine(ChangeTool());
         }
 
-        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.PneumaticCylinder && !startPneumatic)
+        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.C1 && !startPneumatic && up)
         {
             StartCoroutine(Rotate());
         }
 
-        if (ShopTool.plcHandler.handOutupState == PlcHandler.HandOutputStates.PneumaticCylinder)
+        if (ShopTool.plcHandler.handOutupState == PlcHandler.HandOutputStates.None && down)
         {
             StartCoroutine(Rotate());
         }
@@ -100,7 +102,7 @@ public class Hand : MonoBehaviour
         switch (ShopTool.plcHandler.handOutupState)
         {
             //Поворот руки на 180 градусов
-            case PlcHandler.HandOutputStates.RotateAngle_90:
+            case PlcHandler.HandOutputStates._90_tool:
                 {
                     float y = 90;
                     while (y <= 180)
@@ -116,12 +118,19 @@ public class Hand : MonoBehaviour
                     CurrentTool.ToolObject.transform.parent = Hand_obj.transform;
                     change = false;
 
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.RotateAngle_90;
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._90_tool;
 
                     break;
                 }
+            //Захват
+            case PlcHandler.HandOutputStates.Lock_tool:
+                {
+                    StopCoroutine(ChangeTool());
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Lock_tool;
+                    break;
+                }
             //Выдвижение руки
-            case PlcHandler.HandOutputStates.Down:
+            case PlcHandler.HandOutputStates.Hand_down:
                 {
                     float y = cur_Y;
                     while (y >= cur_Y - 0.074f)
@@ -133,11 +142,11 @@ public class Hand : MonoBehaviour
                     }
                     StopCoroutine(ChangeTool());
 
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Down;
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_D;
                     break;
                 }
             //Проворот руки на 360 градусов
-            case PlcHandler.HandOutputStates.RotateAngle_180:
+            case PlcHandler.HandOutputStates._180an:
                 {
                     float y = 180;
                     while (y >= 0)
@@ -148,11 +157,11 @@ public class Hand : MonoBehaviour
                     }
                     StopCoroutine(ChangeTool());
 
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.RotateAngle_180;
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._180an;
                     break;
                 }
             //Задвижение руки
-            case PlcHandler.HandOutputStates.Up:
+            case PlcHandler.HandOutputStates.Hand_up:
                 {
                     float y = cur_Y - 0.074f;
                     while (y <= cur_Y)
@@ -164,11 +173,11 @@ public class Hand : MonoBehaviour
                     }
                     StopCoroutine(ChangeTool());
 
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Up;
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_U;
                     break;
                 }
             //Проворот руки на 90 градусов
-            case PlcHandler.HandOutputStates.Return:
+            case PlcHandler.HandOutputStates._90_default:
                 {
                     if (!change)
                         ChangeParent();
@@ -183,7 +192,10 @@ public class Hand : MonoBehaviour
                     }
                     StopCoroutine(ChangeTool());
 
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Return;
+                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._90_Def;
+                    ShopTool.plcHandler.Impulse(false);
+                    down = true;
+
                     startPneumatic = false;
                     break;
                 }
@@ -208,7 +220,8 @@ public class Hand : MonoBehaviour
 
                 yield return null;
             }
-            ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.PneumaticCylinder;
+            ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.C1;
+            up = false;
             rotateToCapture = false;
         }
         else
@@ -223,6 +236,8 @@ public class Hand : MonoBehaviour
             }
             ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.None;
             rotateToCapture = true;
+            up = true;
+            down = false;
         }
 
         startPneumatic = false;

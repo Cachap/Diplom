@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - AccidentHandler
     - Camera
     - CreateTools
     - CreateWindow
@@ -18,8 +19,10 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
+    - UnityEngine.UI.GridLayoutGroup
     - UnityEngine.UI.Image
     - UnityEngine.UI.Text
   sceneClasses:
@@ -43,6 +46,8 @@ ScriptsOnlyBuild:
     - Class: 48
       Script: {instanceID: 0}
     - Class: 54
+      Script: {instanceID: 0}
+    - Class: 64
       Script: {instanceID: 0}
     - Class: 65
       Script: {instanceID: 0}
@@ -71,26 +76,38 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2364}
     - Class: 114
-      Script: {instanceID: 2486}
+      Script: {instanceID: 2450}
     - Class: 114
-      Script: {instanceID: 2664}
+      Script: {instanceID: 2488}
     - Class: 114
-      Script: {instanceID: 3446}
+      Script: {instanceID: 2666}
     - Class: 114
-      Script: {instanceID: 3660}
+      Script: {instanceID: 2744}
     - Class: 114
-      Script: {instanceID: 3794}
+      Script: {instanceID: 3450}
     - Class: 114
-      Script: {instanceID: 3954}
+      Script: {instanceID: 3664}
+    - Class: 114
+      Script: {instanceID: 3798}
+    - Class: 114
+      Script: {instanceID: 3956}
+    - Class: 114
+      Script: {instanceID: 4178}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
+    - Class: 136
+      Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 198
+      Script: {instanceID: 0}
+    - Class: 199
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -271,10 +288,16 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
-      Hash: e1ace4f694684006fa4c082114575766
+      Hash: 069e0b88d19c98eb616875ddabb0f11d
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts.Machine
     className: Tool
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: AccidentHandler
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -413,12 +436,6 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: PlayModeRunnerCallback
-  - hash:
-      serializedVersion: 2
-      Hash: 221e92ba52e8a9cc2b2e44753ede55d5
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: Assets.Scripts.Machine
-    className: PlcHandler
   - hash:
       serializedVersion: 2
       Hash: bd3cf68c8964d3c66d1c43f4f98508c9

@@ -11,7 +11,7 @@ public class ShopTool : MonoBehaviour
     //Номер сменяемого инструмента
     public static int number = 0;
     //Текущий номер инструмента
-    private byte count = 0;
+    private int count = 0;
     //Тееущий угол поворота
     private float x = 0;
     //Состояние, которое необходимо для полного поворота
@@ -29,9 +29,11 @@ public class ShopTool : MonoBehaviour
     private void Update()
     {
         plcHandler.ReadPlcRotate();
+
         if (count != plcHandler.numberCurrentTool && !start && plcHandler.numberCurrentTool != 0)
         {
             count = plcHandler.numberCurrentTool;
+            temporaryState = plcHandler.shopToolState;
             StartCoroutine(Rotate());
         }
     }
@@ -39,45 +41,44 @@ public class ShopTool : MonoBehaviour
     private IEnumerator Rotate()
     {
         start = true;
-
         if (temporaryState == PlcHandler.ShopToolStates.CwRotation)
         {
-            while (x < angle * count)
+            while (count - 1 != plcHandler.numberTool)
             {
-                x += Time.deltaTime * speed;
-                transform.localRotation = Quaternion.Euler(x, 0, 0);
+                while (x <= angle * count)
+                {
+                    x += Time.deltaTime * speed;
+                    transform.localRotation = Quaternion.Euler(x, 0, 0);
 
-                yield return null;
+                    yield return null;
+                }
+                count++;
+                yield return new WaitForSecondsRealtime(2f);
             }
         }
 
         if (temporaryState == PlcHandler.ShopToolStates.CcwRotation)
         {
-            while (x > angle * count)
+            while (count + 1 != plcHandler.numberTool)
             {
-                x -= Time.deltaTime * speed;
-                transform.localRotation = Quaternion.Euler(x, 0, 0);
+                while (x >= angle * count)
+                {
+                    x -= Time.deltaTime * speed;
+                    transform.localRotation = Quaternion.Euler(x, 0, 0);
 
-                yield return null;
+                    yield return null;
+                }
+                x = angle * count;
+                count--;
+                yield return new WaitForSecondsRealtime(2f);
             }
         }
 
         StopCoroutine(Rotate());
-
         temporaryState = plcHandler.shopToolState;
+        count = plcHandler.numberTool;
         number = count;
-
-        if(number == plcHandler.numberTool)
-        {
-            plcHandler.Impulse(true);
-            Invoke(nameof(Impulse), 0.5f);
-        }
-
+        plcHandler.Impulse(true);     
         start = false;
-    }
-
-    private void Impulse()
-    {
-        plcHandler.Impulse(false);
     }
 }

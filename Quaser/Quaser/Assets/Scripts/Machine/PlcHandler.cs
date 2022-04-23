@@ -4,9 +4,9 @@ namespace Assets.Scripts.Machine
 {
     public class PlcHandler
     {
-        public enum HandInputStates { RotateAngle_90, Down, RotateAngle_180, Up, Return, PneumaticCylinder, None }
-        public enum HandOutputStates { RotateAngle_90, Down, RotateAngle_180, Up, Return, PneumaticCylinder, None }
-        public enum ShopToolStates { CwRotation, CcwRotation, PneumaticCylinder, None }
+        public enum HandInputStates { C1, _90_tool, Lock_tool, Hand_D, _180an, Hand_U, _90_Def, None}
+        public enum HandOutputStates {_90_tool, Lock_tool, Hand_down, Hand_up, _180an, _90_default, None }
+        public enum ShopToolStates { CwRotation, CcwRotation, C1, None }
 
         public HandInputStates handInputState;
         public HandOutputStates handOutupState;
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Machine
                     break;
 
                 case 2:
-                    shopToolState = ShopToolStates.PneumaticCylinder;
+                    shopToolState = ShopToolStates.C1;
                     break;
 
                 case 3:
@@ -65,27 +65,27 @@ namespace Assets.Scripts.Machine
             switch (numberBitHand)
             {
                 case 0:
-                    handOutupState = HandOutputStates.RotateAngle_90;
+                    handOutupState = HandOutputStates._90_tool;
                     break;
 
                 case 1:
-                    handOutupState = HandOutputStates.Down;
+                    handOutupState = HandOutputStates.Lock_tool;
                     break;
 
                 case 2:
-                    handOutupState = HandOutputStates.RotateAngle_180;
+                    handOutupState = HandOutputStates.Hand_down;
                     break;
 
                 case 3:
-                    handOutupState = HandOutputStates.Up;
+                    handOutupState = HandOutputStates.Hand_up;
                     break;
 
                 case 4:
-                    handOutupState = HandOutputStates.Return;
+                    handOutupState = HandOutputStates._180an;
                     break;
 
                 case 5:
-                    handOutupState = HandOutputStates.PneumaticCylinder;
+                    handOutupState = HandOutputStates._90_default;
                     break;
 
                 case 6:
@@ -94,6 +94,7 @@ namespace Assets.Scripts.Machine
             }
         }
 
+        //Двигатель
         public void Impulse(bool value)
         {
             Form1.impuls = value;
@@ -101,37 +102,45 @@ namespace Assets.Scripts.Machine
 
         public void WritePlc()
         {
-            for(int i = 0; i < Form1.inputValue.Length; i++)
-                Form1.inputValue[i] = false;
+            //for(int i = 0; i < Form1.inputValue.Length; i++)
+            //    Form1.inputValue[i] = false;
 
             switch (handInputState)
             {
-                case HandInputStates.PneumaticCylinder:
+                case HandInputStates.C1:
                     Form1.inputValue[0] = true;
                     break;
 
-                case HandInputStates.RotateAngle_90:
+                case HandInputStates._90_tool:
                     Form1.inputValue[1] = true;
                     break;
 
-                case HandInputStates.Down:
+                case HandInputStates.Lock_tool:
                     Form1.inputValue[2] = true;
                     break;
 
-                case HandInputStates.RotateAngle_180:
+                case HandInputStates.Hand_D:
                     Form1.inputValue[3] = true;
                     break;
 
-                case HandInputStates.Up:
+                case HandInputStates._180an:
                     Form1.inputValue[4] = true;
                     break;
 
-                case HandInputStates.Return:
+                case HandInputStates.Hand_U:
                     Form1.inputValue[5] = true;
                     break;
 
+                case HandInputStates._90_Def:
+                    Form1.inputValue[6] = true;
+					break;
+
                 case HandInputStates.None:
-                    break;
+                {
+                    for (int i = 0; i < Form1.inputValue.Length; i++)
+                        Form1.inputValue[i] = false;
+                        break;
+                }
             }
         }
     }

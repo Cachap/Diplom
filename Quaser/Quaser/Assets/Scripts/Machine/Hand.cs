@@ -69,7 +69,7 @@ public class Hand : MonoBehaviour
     private void WritePlc()
     {
         ShopTool.plcHandler.WritePlc();
-        start = false;
+        //start = false;
     }
 
     private void ChangeParent()
@@ -202,6 +202,8 @@ public class Hand : MonoBehaviour
         }
 
         WritePlc();
+        yield return new WaitForSecondsRealtime(1f);
+        start = false;
     }
     #endregion
 

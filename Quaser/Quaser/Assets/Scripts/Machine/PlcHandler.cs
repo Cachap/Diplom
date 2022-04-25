@@ -7,10 +7,12 @@ namespace Assets.Scripts.Machine
         public enum HandInputStates { C1, _90_tool, Lock_tool, Hand_D, _180an, Hand_U, _90_Def, None}
         public enum HandOutputStates {_90_tool, Lock_tool, Hand_down, Hand_up, _180an, _90_default, None }
         public enum ShopToolStates { CwRotation, CcwRotation, C1, None }
+        public enum ShopToolInputStates { LRR, RRR, None }
 
         public HandInputStates handInputState;
         public HandOutputStates handOutupState;
         public ShopToolStates shopToolState;
+        public ShopToolInputStates shopToolInputState;
 
         private int numberBitHand;
         private int numberBitShopTool;
@@ -18,15 +20,42 @@ namespace Assets.Scripts.Machine
         public byte numberCurrentTool = 0;
         public int numberTool = 100;
 
+        public PlcHandler()
+        {
+            handInputState = HandInputStates.None;
+            handOutupState = HandOutputStates.None;
+            shopToolState = ShopToolStates.None;
+		}
+
+        public void WritePlcRotate()
+        {
+            for (int i = 0; i < Form1.plcRotateInput.Length; i++)
+                Form1.plcRotateInput[i] = false;
+
+            switch (shopToolInputState)
+            {
+                case ShopToolInputStates.RRR:
+                    Form1.plcRotateInput[0] = true;
+                    break;
+
+                case ShopToolInputStates.LRR:
+                    Form1.plcRotateInput[1] = true;
+                    break;
+
+				case ShopToolInputStates.None:
+					break;
+			}
+        }
+
         public void ReadPlcRotate()
         {
             numberBitShopTool = 3;
             numberCurrentTool = Form1.currentluNumberTool;
             numberTool = Form1.numberTool;
 
-            for (int i = 0; i < Form1.plcRotate.Length; i++)
+            for (int i = 0; i < Form1.plcRotateOutput.Length; i++)
             {
-                if(Form1.plcRotate[i] == true)
+                if(Form1.plcRotateOutput[i] == true)
                     numberBitShopTool = i;
             }
 
@@ -102,10 +131,10 @@ namespace Assets.Scripts.Machine
 
         public void WritePlc()
         {
-            //for(int i = 0; i < Form1.inputValue.Length; i++)
-            //    Form1.inputValue[i] = false;
+			for (int i = 0; i < Form1.inputValue.Length; i++)
+				Form1.inputValue[i] = false;
 
-            switch (handInputState)
+			switch (handInputState)
             {
                 case HandInputStates.C1:
                     Form1.inputValue[0] = true;

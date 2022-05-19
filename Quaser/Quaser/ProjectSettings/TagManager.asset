@@ -11,6 +11,8 @@ TagManager:
   - TriggerTable
   - TriggerGuide
   - TriggerSpindle
+  - TriggerColor
+  - AllowedTrigger
   layers:
   - Default
   - TransparentFX

@@ -61,16 +61,16 @@ namespace Assets.Scripts.Machine
         private float length;
         private float radius;
         private float positionY;
-        private GameObject CutterObject;
+        public GameObject CutterObject;
 
         private readonly GameObject ToolInPatronObject;
-        private readonly GameObject ToolObjectLoad;
+        public readonly GameObject ToolObjectLoad;
 
-        private const float COEF_X = 0.00034f;
-        private const float COEF_Z = 0.00037f;
-        private const float COEF_Y = 0.000275f;
+		private const float COEF_X = 0.00034f;
+		private const float COEF_Z = 0.00037f;
+		private const float COEF_Y = 0.000275f;
 
-        public Tool()
+		public Tool()
         {
             ToolInPatronObject = Resources.Load<GameObject>("Patron");
             ToolObjectLoad = Resources.Load<GameObject>("Цанговый патрон");
@@ -117,10 +117,10 @@ namespace Assets.Scripts.Machine
 
         public void ChangeSize()
         {
-            CutterObject.transform.localScale = new Vector3(radius * COEF_X * 2, length * COEF_Y, radius * COEF_Z * 2);
-            CutterObject.transform.localPosition = new Vector3(CutterObject.transform.localPosition.x,
-                positionY - (length * COEF_Y - 0.02f),
-                CutterObject.transform.localPosition.z);
+			CutterObject.transform.localScale = new Vector3(radius * COEF_X * 2, length * COEF_Y, radius * COEF_Z * 2);
+			CutterObject.transform.localPosition = new Vector3(CutterObject.transform.localPosition.x,
+				positionY - (length * COEF_Y - 0.02f),
+			CutterObject.transform.localPosition.z);
         }
 
         public void UpdateTool()
@@ -132,10 +132,13 @@ namespace Assets.Scripts.Machine
 
         public void UpdateToolInSpindle()
         {
-            Length = Form1.toolParam_1.cutting_edge[0].lenght1;
-            Radius = Form1.toolParam_1.cutting_edge[0].radius;
-            Name = Form1.toolParam_1.ToolName;
-            ChangeSize();
+			//Length = Form1.toolParam_1.cutting_edge[0].lenght1;
+			//Radius = Form1.toolParam_1.cutting_edge[0].radius;
+			//Name = Form1.toolParam_1.ToolName;
+			Length = Random.Range(0f, 300f);
+            Radius = Random.Range(5f, 76.2f);
+            Name = "Tool";
+			ChangeSize();
             TextUpdate.Change(this);
         }
     }

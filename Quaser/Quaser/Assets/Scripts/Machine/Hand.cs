@@ -35,6 +35,8 @@ public class Hand : MonoBehaviour
     public static List<Tool> ChangeTools;
     public static List<GameObject> PatronObjects;
 
+    private Client client;
+
     private void Start()
 	{
         PatronObjects = new List<GameObject>();
@@ -42,191 +44,199 @@ public class Hand : MonoBehaviour
 
         Hand_obj = gameObject;
         cur_Y = transform.position.y;
+
+        client = GameObject.Find("Main Camera").GetComponent<Client>();
     }
 
 	void Update()
-    {
-        ShopTool.plcHandler.ReadPlc();
-        ShopTool.plcHandler.ReadPlcRotate();
-
-        if (!start && ShopTool.plcHandler.handOutupState != PlcHandler.HandOutputStates.None)
-        {
-            StartCoroutine(ChangeTool());
-        }
-
-        if (ShopTool.plcHandler.shopToolState == PlcHandler.ShopToolStates.C1 && !startPneumatic)
-        {
-            StartCoroutine(Rotate());
-        }
-
-        if (ShopTool.plcHandler.handOutupState == PlcHandler.HandOutputStates.None && !startPneumatic && down)
-        {
-            StartCoroutine(Rotate());
-        }
-    }
-
-    private void WritePlc()
 	{
-        StopCoroutine(ChangeTool());
-        ShopTool.plcHandler.WritePlc();
+		if (client.isRun)
+		{
+			client.plcHandler.ReadPlc();
+			client.plcHandler.ReadPlcRotate();
+
+			if (!start && client.plcHandler.handOutupState != PlcHandler.HandOutputStates.None)
+			{
+				StartCoroutine(ChangeTool());
+			}
+
+			if (client.plcHandler.shopToolState == PlcHandler.ShopToolStates.C1 && !startPneumatic)
+			{
+				StartCoroutine(Rotate());
+			}
+
+			if (client.plcHandler.handOutupState == PlcHandler.HandOutputStates.None && !startPneumatic && down)
+			{
+				StartCoroutine(Rotate());
+			}
+		}
 	}
 
-    private void ChangeParent()
-    {
-        //Перепривязка родителей
-        ChangeTools[ShopTool.number].ToolObject.transform.parent = SpindleObject.transform;
-        CurrentTool.ToolObject.transform.parent = PatronObjects[ShopTool.number].transform;
+	private void WritePlc()
+	{
+		StopCoroutine(ChangeTool());
+		client.plcHandler.WritePlc();
+	}
 
-        //Меняем объекты местами
-        (CurrentTool, ChangeTools[ShopTool.number]) = (ChangeTools[ShopTool.number], CurrentTool);
+	private void ChangeParent()
+	{
+		//Перепривязка родителей
+		ChangeTools[ShopTool.number].ToolObject.transform.parent = SpindleObject.transform;
+		CurrentTool.ToolObject.transform.parent = PatronObjects[ShopTool.number].transform;
 
-        CurrentTool.ToolObject.tag = "CurrentTool";
-        ChangeTools[ShopTool.number].ToolObject.tag = "Tool";
+		//Меняем объекты местами
+		(CurrentTool, ChangeTools[ShopTool.number]) = (ChangeTools[ShopTool.number], CurrentTool);
 
-        //Сдвиг к центру патрона и шпинделя
-        ChangeTools[ShopTool.number].ToolObject.transform.localPosition = new Vector3(X, Y, Z);
-        ChangeTools[ShopTool.number].ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+		CurrentTool.ToolObject.tag = "CurrentTool";
+		ChangeTools[ShopTool.number].ToolObject.tag = "Tool";
 
-        CurrentTool.ToolObject.transform.localPosition = new Vector3(0, 0, 0);
-        CurrentTool.ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+		//Сдвиг к центру патрона и шпинделя
+		ChangeTools[ShopTool.number].ToolObject.transform.localPosition = new Vector3(X, Y, Z);
+		ChangeTools[ShopTool.number].ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        TextUpdate.Change(CurrentTool);
-        change = true;
-    }
+		CurrentTool.ToolObject.transform.localPosition = new Vector3(0, 0, 0);
+		CurrentTool.ToolObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-    #region Алгоритм смены инструмента
-    public IEnumerator ChangeTool()
-    {
-        start = true;
-        switch (ShopTool.plcHandler.handOutupState)
-        {
-            //Поворот руки на 180 градусов
-            case PlcHandler.HandOutputStates._90_tool:
-                {
-                    float y = 90;
-                    while (y <= 180)
-                    {
-                        y += speed;
-                        transform.localRotation = Quaternion.Euler(0, y, 0);
+		TextUpdate.Change(CurrentTool);
+		change = true;
+	}
 
-                        yield return null;
-                    }
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._90_tool;
-                    ChangeTools[ShopTool.number].ToolObject.transform.parent = Hand_obj.transform;
-                    CurrentTool.ToolObject.transform.parent = Hand_obj.transform;
-                    change = false;
+	#region Алгоритм смены инструмента
+	public IEnumerator ChangeTool()
+	{
+		start = true;
+		switch (client.plcHandler.handOutupState)
+		{
+			//Поворот руки на 180 градусов
+			case PlcHandler.HandOutputStates._90_tool:
+				{
+					float y = 90;
+					while (y <= 180)
+					{
+						y += speed;
+						transform.localRotation = Quaternion.Euler(0, y, 0);
 
-                    break;
-                }
-            //Выдвижение руки
-            case PlcHandler.HandOutputStates.Hand_down:
-                {
-                    float y = cur_Y;
-                    while (y >= cur_Y - 0.074f)
-                    {
-                        y -= speed/150;
-                        transform.position = new Vector3(transform.position.x, y, transform.position.z);
+						yield return null;
+					}
+					client.plcHandler.handInputState = PlcHandler.HandInputStates._90_tool;
+					ChangeTools[ShopTool.number].ToolObject.transform.parent = Hand_obj.transform;
+					CurrentTool.ToolObject.transform.parent = Hand_obj.transform;
+					change = false;
 
-                        yield return null;
-                    }
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_D;
-                    break;
-                }
-            //Проворот руки на 360 градусов
-            case PlcHandler.HandOutputStates._180an:
-                {
-                    float y = 180;
-                    while (y >= 0)
-                    {
-                        y -= speed;
-                        transform.localRotation = Quaternion.Euler(0, y, 0);
-                        yield return null;
-                    }
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._180an;
-                    break;
-                }
-            //Задвижение руки
-            case PlcHandler.HandOutputStates.Hand_up:
-                {
-                    float y = cur_Y - 0.074f;
-                    while (y <= cur_Y)
-                    {
-                        y += speed / 150;
-                        transform.position = new Vector3(transform.position.x, y, transform.position.z);
+					break;
+				}
+			//Выдвижение руки
+			case PlcHandler.HandOutputStates.Hand_down:
+				{
+					float y = cur_Y;
+					while (y >= cur_Y - 0.074f)
+					{
+						y -= speed / 150;
+						transform.position = new Vector3(transform.position.x, y, transform.position.z);
 
-                        yield return null;
-                    }
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_U;
-                    break;
-                }
-            //Проворот руки на 90 градусов
-            case PlcHandler.HandOutputStates._90_default:
-                {
-                    if (!change)
-                        ChangeParent();
+						yield return null;
+					}
+					client.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_D;
+					break;
+				}
+			//Проворот руки на 360 градусов
+			case PlcHandler.HandOutputStates._180an:
+				{
+					float y = 180;
+					while (y >= 0)
+					{
+						y -= speed;
+						transform.localRotation = Quaternion.Euler(0, y, 0);
+						yield return null;
+					}
+					client.plcHandler.handInputState = PlcHandler.HandInputStates._180an;
+					break;
+				}
+			//Задвижение руки
+			case PlcHandler.HandOutputStates.Hand_up:
+				{
+					float y = cur_Y - 0.074f;
+					while (y <= cur_Y)
+					{
+						y += speed / 150;
+						transform.position = new Vector3(transform.position.x, y, transform.position.z);
 
-                    float y = 0;
-                    while (y >= -90)
-                    {
-                        y -= speed;
-                        transform.localRotation = Quaternion.Euler(0, y, 0);
+						yield return null;
+					}
+					client.plcHandler.handInputState = PlcHandler.HandInputStates.Hand_U;
+					break;
+				}
+			//Проворот руки на 90 градусов
+			case PlcHandler.HandOutputStates._90_default:
+				{
+					if (!change)
+						ChangeParent();
 
-                        yield return null;
-                    }
-                    ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates._90_Def;
+					float y = 0;
+					while (y >= -90)
+					{
+						y -= speed;
+						transform.localRotation = Quaternion.Euler(0, y, 0);
 
-                    //ShopTool.plcHandler.Impulse(false);
-                    down = true;
-                    startPneumatic = false;
-                    break;
-                }
-        }
+						yield return null;
+					}
+					client.plcHandler.handInputState = PlcHandler.HandInputStates._90_Def;
 
-        WritePlc();
+					//client.plcHandler.Impulse(false);
+					down = true;
+					startPneumatic = false;
+					break;
+				}
+		}
 
-		yield return new WaitForSecondsRealtime(0.1f);
+		WritePlc();
+
+		yield return new WaitForSecondsRealtime(0.3f);
 		start = false;
 	}
-    #endregion
+	#endregion
 
-    #region Поворот патрона
-    public IEnumerator Rotate()
-    {
-        startPneumatic = true;
+	#region Поворот патрона
+	public IEnumerator Rotate()
+	{
+		startPneumatic = true;
 
-        if (rotateToCapture)
-        {
-            while (PatronObjects[ShopTool.number].transform.rotation.eulerAngles.z >= 1f)
-            {
-                PatronObjects[ShopTool.number].transform.RotateAround(CreateTools.tools[ShopTool.number].PositionPoint,
-                    Vector3.back,
-                    Mathf.Lerp(0, 90, 0.01f));
+		if (rotateToCapture)
+		{
+			while (PatronObjects[ShopTool.number].transform.rotation.eulerAngles.z >= 1f)
+			{
+				PatronObjects[ShopTool.number].transform.RotateAround(CreateTools.tools[ShopTool.number].PositionPoint,
+					Vector3.back,
+					Mathf.Lerp(0, 90, 0.01f));
 
-                yield return null;
-            }
-            ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.C1;
-            rotateToCapture = false;
-            ShopTool.plcHandler.Impulse(false);
-        }
-        else
-        {
-            while (PatronObjects[ShopTool.number].transform.rotation.eulerAngles.z <= 90)
-            {
-                PatronObjects[ShopTool.number].transform.RotateAround(CreateTools.tools[ShopTool.number].PositionPoint,
-                    Vector3.back,
-                    Mathf.Lerp(0, -90, 0.01f));
+				yield return null;
+			}
+			client.plcHandler.handInputState = PlcHandler.HandInputStates.C1;
+			rotateToCapture = false;
+			client.plcHandler.Impulse(false);
+		}
+		else
+		{
+			while (PatronObjects[ShopTool.number].transform.rotation.eulerAngles.z <= 90)
+			{
+				PatronObjects[ShopTool.number].transform.RotateAround(CreateTools.tools[ShopTool.number].PositionPoint,
+					Vector3.back,
+					Mathf.Lerp(0, -90, 0.01f));
 
-                yield return  null;
-            }
-            ShopTool.plcHandler.handInputState = PlcHandler.HandInputStates.None;
-            rotateToCapture = true;
-            down = false;
-        }
+				yield return null;
+			}
 
-        ShopTool.plcHandler.WritePlc();
-        StopCoroutine(Rotate());
-        yield return new WaitForSecondsRealtime(0.1f);
-        startPneumatic = false;
-    }
-    #endregion
+			client.plcHandler.handInputState = PlcHandler.HandInputStates.None;
+			client.ChangeTool();
+
+			rotateToCapture = true;
+			down = false;
+		}
+
+		client.plcHandler.WritePlc();
+		StopCoroutine(Rotate());
+		yield return new WaitForSecondsRealtime(0.1f);
+		startPneumatic = false;
+	}
+	#endregion
 }

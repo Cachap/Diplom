@@ -16,14 +16,22 @@ public class AccidentHandler : MonoBehaviour
 
     void Start()
     {
+
         AccidentPanel = GameObject.Find(nameof(AccidentPanel));
         ResetButton = GameObject.Find(nameof(ResetButton)).GetComponent<Button>();
         ResetButton.interactable = false;
 
         defaultColorImage = AccidentPanel.GetComponent<Image>().color;
-        meshRenderer = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
         textPanel = AccidentPanel.transform.GetChild(0).gameObject.GetComponent<Text>();
         panelImage = AccidentPanel.GetComponent<Image>();
+        if (gameObject.name != "Cutter")
+        {
+            meshRenderer = transform.GetChild(0).gameObject.GetComponent<MeshRenderer>();
+        }
+        else
+        {
+            meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        }
 
         defaultColorMaterial = meshRenderer.material.color;
     }
@@ -40,9 +48,18 @@ public class AccidentHandler : MonoBehaviour
             ResetButton.interactable = true;
             StartCoroutine(Blink());
         }
+       
+        if(other.CompareTag("AllowedTrigger"))
+        {
+            defaultColorMaterial = other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color;
+            other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = warningColor;
+            textPanel.text = "Авария";
+            ResetButton.interactable = true;
+            StartCoroutine(Blink());
+        }
     }
 
-    private void OnTriggerExit(Collider other)
+	private void OnTriggerExit(Collider other)
     {
         if ((gameObject.name == "Стол" && other.CompareTag("TriggerTable"))
             || (gameObject.name == "Направляющая стола" && other.CompareTag("TriggerGuide"))
@@ -53,10 +70,19 @@ public class AccidentHandler : MonoBehaviour
             meshRenderer.material.color = defaultColorMaterial;
             ResetButton.interactable = false;
             panelImage.color = defaultColorImage;
+            StopCoroutine(Blink());
+        }
+
+        if (other.CompareTag("AllowedTrigger"))
+        {
+            other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = defaultColorMaterial;
+            textPanel.text = "Работа";
+            ResetButton.interactable = false;
+            StopCoroutine(Blink());
         }
     }
 
-    public IEnumerator Blink()
+	public IEnumerator Blink()
     {
         while(textPanel.text != "Работа")
         {

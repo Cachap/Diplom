@@ -6,12 +6,10 @@ public class ShopTool : MonoBehaviour
 {
 	//Параметры для вращения магазина
 	private readonly float angle = 12f;
-	private readonly float speed = 12f;
+	private readonly float speed = 0.1f;
 
 	//Номер сменяемого инструмента
 	public static int number = 0;
-	//Текущий номер инструмента
-	private int count = 0;
 	//Тееущий угол поворота
 	private float _x = 0;
 	//Состояние, которое необходимо для полного поворота
@@ -19,49 +17,58 @@ public class ShopTool : MonoBehaviour
 	//Для корутины
 	private bool start;
 
-	public static PlcHandler plcHandler;
+	private Client client;
 
 	private void Start()
 	{
-		plcHandler = new PlcHandler();
+		client = GameObject.Find("Main Camera").GetComponent<Client>();
 	}
 
 	private void Update()
 	{
-		plcHandler.ReadPlcRotate();
+		if (client.isRun)
+		{
+			client.plcHandler.ReadPlcRotate();
 
-		if ((plcHandler.shopToolState == PlcHandler.ShopToolStates.CwRotation 
-			|| plcHandler.shopToolState == PlcHandler.ShopToolStates.CcwRotation)
-			&& !start)
-        {
-            temporaryState = plcHandler.shopToolState;
-            StartCoroutine(Rotate());
-        }
-    }
+			if ((client.plcHandler.shopToolState == PlcHandler.ShopToolStates.CwRotation
+				|| client.plcHandler.shopToolState == PlcHandler.ShopToolStates.CcwRotation)
+				&& !start)
+			{
+				if(!client.start)
+					client.ChangeTool();
 
-    private IEnumerator Rotate()
-    {
-        start = true;
+				if(client.permissionChange)
+				{
+					temporaryState = client.plcHandler.shopToolState;
+					StartCoroutine(Rotate());
+				}
+			}
+		}
+	}
+
+	private IEnumerator Rotate()
+	{
+		start = true;
 
 		if (temporaryState == PlcHandler.ShopToolStates.CwRotation)
 		{
 			float x = 0;
 			while (x <= angle)
 			{
-				x += Time.deltaTime * speed;
-				_x += Time.deltaTime * speed;
+				x += speed;
+				_x += speed;
 				transform.localRotation = Quaternion.Euler(_x, 0, 0);
 
 				yield return null;
 			}
 
-			plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.RRR;
-			plcHandler.WritePlcRotate();
+			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.RRR;
+			client.plcHandler.WritePlcRotate();
 
 			yield return new WaitForSecondsRealtime(0.2f);
 
-			plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
-			plcHandler.WritePlcRotate();
+			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
+			client.plcHandler.WritePlcRotate();
 		}
 
 		if (temporaryState == PlcHandler.ShopToolStates.CcwRotation)
@@ -69,33 +76,34 @@ public class ShopTool : MonoBehaviour
 			float x = 0;
 			while (x <= angle)
 			{
-				x += Time.deltaTime * speed;
-				_x -= Time.deltaTime * speed;
+				x += speed;
+				_x -= speed;
 				transform.localRotation = Quaternion.Euler(_x, 0, 0);
 
 				yield return null;
 			}
 
-			plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.LRR;
-			plcHandler.WritePlcRotate();
+			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.LRR;
+			client.plcHandler.WritePlcRotate();
 
 			yield return new WaitForSecondsRealtime(0.2f);
 
-			plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
-			plcHandler.WritePlcRotate();
+			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
+			client.plcHandler.WritePlcRotate();
 
 		}
 
 		StopCoroutine(Rotate());
 
-        temporaryState = plcHandler.shopToolState;
+		temporaryState = client.plcHandler.shopToolState;
 
-		if(plcHandler.numberCurrentTool == plcHandler.numberTool)
+		if (client.plcHandler.numberCurrentTool == client.plcHandler.numberTool)
 		{
-			number = plcHandler.numberTool;
-			plcHandler.Impulse(true);
+			number = client.plcHandler.numberTool;
+			client.plcHandler.Impulse(true);
+			client.start = false;
 		}
 
-        start = false;
-    }
+		start = false;
+	}
 }

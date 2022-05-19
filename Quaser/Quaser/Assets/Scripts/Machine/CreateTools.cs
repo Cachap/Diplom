@@ -9,13 +9,13 @@ public class CreateTools : MonoBehaviour
     //Список инструментов
     public static List<Tool> tools;
 
-    //Координаты для появления патрона
-    private const float X = 0.4665f;
-    private const float Y = 0.9028f;
-    private const float Z = -0.0695f;
+	//Координаты для появления патрона
+	private const float X = 0.4665f;
+	private const float Y = 0.9028f;
+	private const float Z = -0.0695f;
 
-    //Позиция и вращение патрона
-    private Vector3 currentlyPositionTool;
+	//Позиция и вращение патрона
+	private Vector3 currentlyPositionTool;
     private Quaternion currentlyRotationTool;
 
     [SerializeField]

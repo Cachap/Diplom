@@ -3,8 +3,8 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - AccidentHandler
     - Camera
+    - Client
     - CreateTools
-    - CreateWindow
     - Hand
     - Move
     - ShopTool
@@ -492,10 +492,10 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 0c05fa0ff300a0faa91a717dc9c1bf83
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: CreateWindow
+    className: Client
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -607,4 +607,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/maksi/Desktop/Quaser.exe
+  playerPath: "C:/Users/maksi/Desktop/\u0428\u0442\u0443\u0447\u043A\u0438/Quaser/Quaser.exe"

@@ -20,26 +20,29 @@ namespace Assets.Scripts.Machine
         public byte numberCurrentTool = 0;
         public int numberTool = 100;
 
-        public PlcHandler()
+        private readonly Form1 form;
+
+        public PlcHandler(Form1 form)
         {
             handInputState = HandInputStates.None;
             handOutupState = HandOutputStates.None;
             shopToolState = ShopToolStates.None;
+            this.form = form;
 		}
 
         public void WritePlcRotate()
         {
-            for (int i = 0; i < Form1.plcRotateInput.Length; i++)
-                Form1.plcRotateInput[i] = false;
+            for (int i = 0; i < form.plcRotateInput.Length; i++)
+                form.plcRotateInput[i] = false;
 
             switch (shopToolInputState)
             {
                 case ShopToolInputStates.RRR:
-                    Form1.plcRotateInput[0] = true;
+                    form.plcRotateInput[0] = true;
                     break;
 
                 case ShopToolInputStates.LRR:
-                    Form1.plcRotateInput[1] = true;
+                    form.plcRotateInput[1] = true;
                     break;
 
 				case ShopToolInputStates.None:
@@ -50,12 +53,12 @@ namespace Assets.Scripts.Machine
         public void ReadPlcRotate()
         {
             numberBitShopTool = 3;
-            numberCurrentTool = Form1.currentluNumberTool;
-            numberTool = Form1.numberTool;
+            numberCurrentTool = form.currentluNumberTool;
+            numberTool = form.numberTool;
 
-            for (int i = 0; i < Form1.plcRotateOutput.Length; i++)
+            for (int i = 0; i < form.plcRotateOutput.Length; i++)
             {
-                if(Form1.plcRotateOutput[i] == true)
+                if(form.plcRotateOutput[i] == true)
                     numberBitShopTool = i;
             }
 
@@ -83,9 +86,9 @@ namespace Assets.Scripts.Machine
         {
             numberBitHand = 6;
 
-            for (int i = 0; i < Form1.outputValue.Length; i++)
+            for (int i = 0; i < form.outputValue.Length; i++)
             {
-                if (Form1.outputValue[i] == true)
+                if (form.outputValue[i] == true)
                 {
                     numberBitHand = i;
                 }
@@ -126,48 +129,48 @@ namespace Assets.Scripts.Machine
         //Двигатель
         public void Impulse(bool value)
         {
-            Form1.impuls = value;
+            form.impuls = value;
         }
 
         public void WritePlc()
         {
-			for (int i = 0; i < Form1.inputValue.Length; i++)
-				Form1.inputValue[i] = false;
+			for (int i = 0; i < form.inputValue.Length; i++)
+                form.inputValue[i] = false;
 
 			switch (handInputState)
             {
                 case HandInputStates.C1:
-                    Form1.inputValue[0] = true;
+                    form.inputValue[0] = true;
                     break;
 
                 case HandInputStates._90_tool:
-                    Form1.inputValue[1] = true;
+                    form.inputValue[1] = true;
                     break;
 
                 case HandInputStates.Lock_tool:
-                    Form1.inputValue[2] = true;
+                    form.inputValue[2] = true;
                     break;
 
                 case HandInputStates.Hand_D:
-                    Form1.inputValue[3] = true;
+                    form.inputValue[3] = true;
                     break;
 
                 case HandInputStates._180an:
-                    Form1.inputValue[4] = true;
+                    form.inputValue[4] = true;
                     break;
 
                 case HandInputStates.Hand_U:
-                    Form1.inputValue[5] = true;
+                    form.inputValue[5] = true;
                     break;
 
                 case HandInputStates._90_Def:
-                    Form1.inputValue[6] = true;
+                    form.inputValue[6] = true;
 					break;
 
                 case HandInputStates.None:
                 {
-                    for (int i = 0; i < Form1.inputValue.Length; i++)
-                        Form1.inputValue[i] = false;
+                    for (int i = 0; i < form.inputValue.Length; i++)
+                            form.inputValue[i] = false;
                         break;
                 }
             }

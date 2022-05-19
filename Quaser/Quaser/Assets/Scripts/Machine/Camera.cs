@@ -9,7 +9,7 @@ public class Camera : MonoBehaviour
     private float MouseX;
     private float MouseY;
 
-    void Update()
+	void Update()
     {
         if (Input.GetKey(KeyCode.D))
         {

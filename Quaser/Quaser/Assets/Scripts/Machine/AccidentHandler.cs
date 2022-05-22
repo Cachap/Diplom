@@ -1,3 +1,4 @@
+using Assets.Scripts.Machine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,8 +15,12 @@ public class AccidentHandler : MonoBehaviour
     private Text textPanel;
     private Image panelImage;
 
+    private Client client;
+    private bool start;
+
     void Start()
     {
+        client = GameObject.Find("Main Camera").GetComponent<Client>();
 
         AccidentPanel = GameObject.Find(nameof(AccidentPanel));
         ResetButton = GameObject.Find(nameof(ResetButton)).GetComponent<Button>();
@@ -36,20 +41,38 @@ public class AccidentHandler : MonoBehaviour
         defaultColorMaterial = meshRenderer.material.color;
     }
 
-    private void OnTriggerEnter(Collider other)
+	private void OnTriggerEnter(Collider other)
     {
         if ((gameObject.name == "Стол" && other.CompareTag("TriggerTable"))
             || (gameObject.name == "Направляющая стола" && other.CompareTag("TriggerGuide"))
             || (gameObject.name == "Шасси шпинделя" && other.CompareTag("TriggerSpindle"))
             || (gameObject.name == "Cutter" && other.CompareTag("TriggerSpindle")))
         {
+            if(gameObject.name == "Стол")
+            {
+                client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.X;
+			}
+
+            if (gameObject.name == "Направляющая стола")
+            {
+                client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.Y;
+			}
+
+			if (gameObject.name == "Cutter" || gameObject.name == "Шасси шпинделя")
+			{
+				client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.Z;
+			}
+
+            start = true;
             meshRenderer.material.color = warningColor;
             textPanel.text = "Авария";
             ResetButton.interactable = true;
             StartCoroutine(Blink());
-        }
-       
-        if(other.CompareTag("AllowedTrigger"))
+
+            client.plcHandler.WritePlcAccident();
+		}
+
+		if (other.CompareTag("AllowedTrigger"))
         {
             defaultColorMaterial = other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color;
             other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = warningColor;
@@ -66,6 +89,10 @@ public class AccidentHandler : MonoBehaviour
             || (gameObject.name == "Шасси шпинделя" && other.CompareTag("TriggerSpindle"))
             || (gameObject.name == "Cutter" && other.CompareTag("TriggerSpindle")))
         {
+            client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.None;
+            client.plcHandler.WritePlcAccident();
+            start = false;
+
             textPanel.text = "Работа";
             meshRenderer.material.color = defaultColorMaterial;
             ResetButton.interactable = false;

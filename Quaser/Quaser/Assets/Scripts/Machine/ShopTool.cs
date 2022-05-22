@@ -22,14 +22,13 @@ public class ShopTool : MonoBehaviour
 	private void Start()
 	{
 		client = GameObject.Find("Main Camera").GetComponent<Client>();
+		StartCoroutine(Read());
 	}
 
 	private void Update()
 	{
 		if (client.isRun)
 		{
-			client.plcHandler.ReadPlcRotate();
-
 			if ((client.plcHandler.shopToolState == PlcHandler.ShopToolStates.CwRotation
 				|| client.plcHandler.shopToolState == PlcHandler.ShopToolStates.CcwRotation)
 				&& !start)
@@ -40,6 +39,7 @@ public class ShopTool : MonoBehaviour
 				if(client.permissionChange)
 				{
 					temporaryState = client.plcHandler.shopToolState;
+
 					StartCoroutine(Rotate());
 				}
 			}
@@ -65,7 +65,7 @@ public class ShopTool : MonoBehaviour
 			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.RRR;
 			client.plcHandler.WritePlcRotate();
 
-			yield return new WaitForSecondsRealtime(0.2f);
+			yield return new WaitForSecondsRealtime(0.5f);
 
 			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
 			client.plcHandler.WritePlcRotate();
@@ -86,7 +86,7 @@ public class ShopTool : MonoBehaviour
 			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.LRR;
 			client.plcHandler.WritePlcRotate();
 
-			yield return new WaitForSecondsRealtime(0.2f);
+			yield return new WaitForSecondsRealtime(0.5f);
 
 			client.plcHandler.shopToolInputState = PlcHandler.ShopToolInputStates.None;
 			client.plcHandler.WritePlcRotate();
@@ -105,5 +105,13 @@ public class ShopTool : MonoBehaviour
 		}
 
 		start = false;
+	}
+
+	private IEnumerator Read()
+	{
+		if(client.isRun)
+			client.plcHandler.ReadPlcRotate();
+
+		yield return new WaitForSecondsRealtime(0.5f);
 	}
 }

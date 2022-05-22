@@ -143,9 +143,9 @@ public class Hand : MonoBehaviour
 			case PlcHandler.HandOutputStates._180an:
 				{
 					float y = 180;
-					while (y >= 0)
+					while (y >= 5)
 					{
-						y -= speed;
+						y -= speed/2;
 						transform.localRotation = Quaternion.Euler(0, y, 0);
 						yield return null;
 					}
@@ -156,7 +156,7 @@ public class Hand : MonoBehaviour
 			case PlcHandler.HandOutputStates.Hand_up:
 				{
 					float y = cur_Y - 0.074f;
-					while (y <= cur_Y)
+					while (y <= cur_Y - 0.014f)
 					{
 						y += speed / 150;
 						transform.position = new Vector3(transform.position.x, y, transform.position.z);
@@ -191,7 +191,7 @@ public class Hand : MonoBehaviour
 
 		WritePlc();
 
-		yield return new WaitForSecondsRealtime(0.3f);
+		yield return new WaitForSecondsRealtime(0.5f);
 		start = false;
 	}
 	#endregion
@@ -235,7 +235,7 @@ public class Hand : MonoBehaviour
 
 		client.plcHandler.WritePlc();
 		StopCoroutine(Rotate());
-		yield return new WaitForSecondsRealtime(0.1f);
+		yield return new WaitForSecondsRealtime(0.5f);
 		startPneumatic = false;
 	}
 	#endregion

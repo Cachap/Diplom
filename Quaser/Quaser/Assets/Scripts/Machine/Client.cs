@@ -73,12 +73,13 @@ public class Client : MonoBehaviour
 		else
 		{
 			permissionChange = false;
-			while (y > -0.608f)
+			while (y > -0.608f + Hand.CurrentTool.CutterObject.transform.localScale.y * 2 + 0.03f - 0.07f)
 			{
 				y -= 0.002f;
 				yield return null;
 			}
 			isChangeTool = false;
+			start = false;
 			StopCoroutine(ChangePositionForChangeTool());
 		}
 	}

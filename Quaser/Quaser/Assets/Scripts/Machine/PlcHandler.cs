@@ -4,15 +4,18 @@ namespace Assets.Scripts.Machine
 {
     public class PlcHandler
     {
-        public enum HandInputStates { C1, _90_tool, Lock_tool, Hand_D, _180an, Hand_U, _90_Def, None}
-        public enum HandOutputStates {_90_tool, Lock_tool, Hand_down, Hand_up, _180an, _90_default, None }
-        public enum ShopToolStates { CwRotation, CcwRotation, C1, None }
-        public enum ShopToolInputStates { LRR, RRR, None }
+        public enum HandInputStates {C1, _90_tool, Lock_tool, Hand_D, _180an, Hand_U, _90_Def, None}
+        public enum HandOutputStates {_90_tool, Lock_tool, Hand_down, Hand_up, _180an, _90_default, None}
+        public enum ShopToolStates {CwRotation, CcwRotation, C1, None}
+        public enum ShopToolInputStates {LRR, RRR, None}
+        public enum AccidentInputStates {X, Y, Z, None}
 
         public HandInputStates handInputState;
         public HandOutputStates handOutupState;
         public ShopToolStates shopToolState;
         public ShopToolInputStates shopToolInputState;
+        public AccidentInputStates accidentInputState;
+        public bool isAccident;
 
         private int numberBitHand;
         private int numberBitShopTool;
@@ -29,6 +32,36 @@ namespace Assets.Scripts.Machine
             shopToolState = ShopToolStates.None;
             this.form = form;
 		}
+
+        public void ReadPlcAccident()
+        {
+            if (form.accidentOutputValue)
+                isAccident = true;
+        }
+
+        public void WritePlcAccident()
+        {
+            for (int i = 0; i < form.accidentInputValue.Length; i++)
+                form.accidentInputValue[i] = false;
+
+            switch (accidentInputState)
+            {
+                case AccidentInputStates.X:
+                    form.accidentInputValue[0] = true;
+                    break;
+
+                case AccidentInputStates.Y:
+                    form.accidentInputValue[1] = true;
+                    break;
+
+                case AccidentInputStates.Z:
+                    form.accidentInputValue[2] = true;
+                    break;
+
+                case AccidentInputStates.None:
+                    break;
+            }
+        }
 
         public void WritePlcRotate()
         {
@@ -58,8 +91,8 @@ namespace Assets.Scripts.Machine
 
             for (int i = 0; i < form.plcRotateOutput.Length; i++)
             {
-                if(form.plcRotateOutput[i] == true)
-                    numberBitShopTool = i;
+                if (form.plcRotateOutput[i] == true)
+                numberBitShopTool = i;
             }
 
             switch (numberBitShopTool)

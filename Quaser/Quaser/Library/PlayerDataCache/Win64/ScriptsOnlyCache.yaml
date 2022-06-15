@@ -288,7 +288,7 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
-      Hash: 069e0b88d19c98eb616875ddabb0f11d
+      Hash: 6f8abc36380b7b1bfd800bfa6f633923
     assemblyName: Assembly-CSharp.dll
     namespaceName: Assets.Scripts.Machine
     className: Tool
@@ -492,7 +492,7 @@ ScriptsOnlyBuild:
     className: Mask
   - hash:
       serializedVersion: 2
-      Hash: 0c05fa0ff300a0faa91a717dc9c1bf83
+      Hash: 83e5883e8616159dae95745b16667ab4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Client

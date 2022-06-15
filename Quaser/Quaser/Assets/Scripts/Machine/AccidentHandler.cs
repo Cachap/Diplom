@@ -48,14 +48,14 @@ public class AccidentHandler : MonoBehaviour
             || (gameObject.name == "Шасси шпинделя" && other.CompareTag("TriggerSpindle"))
             || (gameObject.name == "Cutter" && other.CompareTag("TriggerSpindle")))
         {
-            if(gameObject.name == "Стол")
-            {
-                client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.X;
+			if (gameObject.name == "Стол")
+			{
+				client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.X;
 			}
 
-            if (gameObject.name == "Направляющая стола")
-            {
-                client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.Y;
+			if (gameObject.name == "Направляющая стола")
+			{
+				client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.Y;
 			}
 
 			if (gameObject.name == "Cutter" || gameObject.name == "Шасси шпинделя")
@@ -63,12 +63,13 @@ public class AccidentHandler : MonoBehaviour
 				client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.Z;
 			}
 
-            start = true;
+			start = true;
             meshRenderer.material.color = warningColor;
             textPanel.text = "Авария";
             ResetButton.interactable = true;
             StartCoroutine(Blink());
 
+            client.isAccident = true;
             client.plcHandler.WritePlcAccident();
 		}
 
@@ -78,6 +79,7 @@ public class AccidentHandler : MonoBehaviour
             other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = warningColor;
             textPanel.text = "Авария";
             ResetButton.interactable = true;
+            client.isAccident = true;
             StartCoroutine(Blink());
         }
     }
@@ -89,14 +91,15 @@ public class AccidentHandler : MonoBehaviour
             || (gameObject.name == "Шасси шпинделя" && other.CompareTag("TriggerSpindle"))
             || (gameObject.name == "Cutter" && other.CompareTag("TriggerSpindle")))
         {
-            client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.None;
-            client.plcHandler.WritePlcAccident();
-            start = false;
+			client.plcHandler.accidentInputState = PlcHandler.AccidentInputStates.None;
+			client.plcHandler.WritePlcAccident();
+			start = false;
 
             textPanel.text = "Работа";
             meshRenderer.material.color = defaultColorMaterial;
             ResetButton.interactable = false;
             panelImage.color = defaultColorImage;
+            client.isAccident = false;
             StopCoroutine(Blink());
         }
 
@@ -105,6 +108,7 @@ public class AccidentHandler : MonoBehaviour
             other.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = defaultColorMaterial;
             textPanel.text = "Работа";
             ResetButton.interactable = false;
+            client.isAccident = false;
             StopCoroutine(Blink());
         }
     }

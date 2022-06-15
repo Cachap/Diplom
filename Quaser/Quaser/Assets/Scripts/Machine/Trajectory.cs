@@ -18,6 +18,7 @@ public class Trajectory : MonoBehaviour
         if(client.isRun)
         {
 			Vector3 currentPoint = transform.position * -1;
+			currentPoint.y = client.y + 0.610f - Hand.CurrentTool.CutterObject.transform.localScale.y/2;
 			line.positionCount++;
 			line.SetPosition(line.positionCount - 1, currentPoint);
 		}

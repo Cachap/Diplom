@@ -70,8 +70,11 @@ namespace Assets.Scripts.Machine
 		private const float COEF_Z = 0.00037f;
 		private const float COEF_Y = 0.000275f;
 
-		public Tool()
+        private Client client;
+
+        public Tool()
         {
+            client = GameObject.Find("Main Camera").GetComponent<Client>();
             ToolInPatronObject = Resources.Load<GameObject>("Patron");
             ToolObjectLoad = Resources.Load<GameObject>("Цанговый патрон");
 
@@ -132,12 +135,11 @@ namespace Assets.Scripts.Machine
 
         public void UpdateToolInSpindle()
         {
-			//Length = Form1.toolParam_1.cutting_edge[0].lenght1;
-			//Radius = Form1.toolParam_1.cutting_edge[0].radius;
-			//Name = Form1.toolParam_1.ToolName;
-			Length = Random.Range(0f, 300f);
+			//Length = client.form.toolParam_1.cutting_edge[0].lenght1;
+			//Radius = client.form.toolParam_1.cutting_edge[0].radius;
+            Length = Random.Range(0f, 300f);
             Radius = Random.Range(5f, 76.2f);
-            Name = "Tool";
+            Name = client.form.toolParam_1.ToolName;
 			ChangeSize();
             TextUpdate.Change(this);
         }

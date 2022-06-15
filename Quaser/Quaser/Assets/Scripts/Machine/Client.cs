@@ -6,13 +6,15 @@ using UnityEngine;
 
 public class Client : MonoBehaviour
 {
-    private Form1 form;
+    public Form1 form;
     private Thread thread;
+    private bool isZero;
 
 	public bool isRun;
 	public bool isChangeTool;
 	public bool permissionChange;
 	public bool start;
+	public bool isAccident;
 
 	public float x;
 	public float y;
@@ -34,16 +36,21 @@ public class Client : MonoBehaviour
 
 	private void Update()
     {
-		if (isRun && !isChangeTool)
+		if (isRun && !isChangeTool && !isAccident)
 		{
 			if (form.x != 0)
 				x = (float)form.x / 1000;
 
-			y = -0.610f + ((float)form.z / 1000 * -1)
-			+ Hand.CurrentTool.CutterObject.transform.localScale.y*2
-			+ 0.03f //Цанговый патрон
-			- 0.07f; //Зазор
-
+			if (form.z != 0 || !isZero)
+			{
+				y = -0.610f + ((float)form.z / 1000)
+				+ Hand.CurrentTool.CutterObject.transform.localScale.y * 2
+				+ 0.03f //Цанговый патрон
+				- 0.07f; //Зазор
+				isZero = true;
+			}
+			
+			
 			if (form.y != 0)
 				z = (float)form.y / 1000;
 		}
